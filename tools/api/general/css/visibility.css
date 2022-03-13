@@ -1,0 +1,21 @@
+
+
+.show, .show-red, .show-blue {
+    border: 1px solid white;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.show-red {
+    border: 1px solid red;
+}
+
+.show-blue {
+    border: 1px solid blue;
+}
+
+.red {background-color: red;}
+.black {background-color: black;}
+.blue {background-color: blue;}
+.green {background-color: green;}
+.white {background-color: white;}
+

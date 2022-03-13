@@ -63,7 +63,8 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
         <!-- !! Local CSS !! -->
         <!-- css libraries -->
         <link rel="stylesheet" href="../../tools/api/general/css/base.css"> <!-- base css library -->
-        <link rel="stylesheet" href="../../tools/api/general/css/containers.css"> <!-- other general css libraries -->
+        <link rel="stylesheet" href="../../tools/api/general/css/positioning.css"> <!-- css position library -->
+        <link rel="stylesheet" href="../../tools/api/general/css/visibility.css"> <!-- css visibility library -->
 
         <!-- main styles -->
         <link rel="stylesheet" href="./resources/workspace/css/main-style.css">
@@ -71,23 +72,28 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 	
 	<body>
 
-        <div class="fill-viewport fit-y">
+        <!-- outer-window container for all content -->
+        <div id="main-outer-window" class="outer-window fill-viewport start-y">
 
-            <header>
-                <h1>Hello</h1>
-            </header>
+            <!-- inner-window container for sub content -->
+            <div id="main-inner-window" class="inner-window center-children-y fill-parent">
 
-            <div class="center-children-y fill-parent">
-                <div id="canvas-window" class="half-height half-width center-self-x show">
-                    <p>Hello, world!</p>
-                    <button>Start Game</button>
-                    <ul>
-                        <li><a href="">suh</a></li>
-                        <li><a href="">suh</a></li>
-                        <li><a href="">suh</a></li>
-                    </ul>
-                    <h2>Testing Title:</h2>
-                    <p>type this: <input type="text"></p>
+                <!-- outer game window -->
+                <div id="main-game-window" class="game-window half-width center-self-x show">
+
+                    <!-- game intro screen -->
+                    <div class="intro-screen center-children-x center-children-y fill-parent">
+                        <!-- center box -->
+                        <div class="half-aspect center-all-text center-children-x medium-padding center-children-y medium-stack-margin">
+                            <h2>Welcome to my game!</h2>
+                            <p>Welcome to my arcade game thing. Press the start button below to get started!</p>
+                            <button>Start!</button>
+                        </div>
+                    </div>
+                    
+                    <!-- game graphics window -->
+                    <canvas class="graphic-display fill-parent blue">
+                    </canvas>
                 </div>
             </div>
 

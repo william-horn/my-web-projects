@@ -1,4 +1,18 @@
 
+/* debug block */
+.block, .block-red, .block-blue {
+    background-color: black;
+    width: 200px;
+    height: 200px;
+}
+
+.block-red {
+    background-color: red;
+}
+
+.block-blue {
+    background-color: blue;
+}
 
 /* resize element to the user's entire screen dimensions */
 .fill-viewport {
@@ -33,13 +47,13 @@
 }
 
 /* fit all content in parent within vertical viewport */
-.fit-y {
+.start-y {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
 
-.fit-x {
+.start-x {
     display: flex;
     justify-content: flex-start;
 }
@@ -52,36 +66,36 @@
     height: 50%;
 }
 
-/* debug block */
-.block, .red-block, .blue-block {
-    background-color: black;
-    width: 200px;
-    height: 200px;
+.half-aspect {
+    width: 50%;
+    height: 50%;
 }
 
-.red-block {
-    background-color: red;
+.center-all-text p {
+    text-align: center;
 }
 
-.blue-block {
-    background-color: blue;
+.small-padding {
+    padding: 5px;
 }
 
-.show, .show-red, .show-blue {
-    border: 1px solid white;
-    background: rgba(0, 0, 0, 0.5);
+.medium-padding {
+    padding: 15px;
 }
 
-.show-red {
-    border: 1px solid red;
+.large-padding {
+    padding: 30px;
 }
 
-.show-blue {
-    border: 1px solid blue;
+.small-stack-margin > * {
+    margin-bottom: 5px;
 }
 
-.height {
-    height: 200px;
+.medium-stack-margin > * {
+    margin-bottom: 15px;
 }
 
+.large-stack-margin > * {
+    margin-bottom: 30px;
+}
 

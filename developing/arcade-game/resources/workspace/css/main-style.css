@@ -36,19 +36,32 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   do this
--   do that
+- 
 
 ==================================================================================================================================
 */
 
 
-#canvas-window {
-    margin-bottom: 10vh;
+/* ----------------- */
+/* Game Window Style */
+/* ----------------- */
+
+.game-window {
+    height: 80%;
+    width: 60%;
 }
 
-p {
-    display: inline;
+/* ------------------ */
+/* Intro Screen Style */
+/* ------------------ */
+
+.intro-screen {
+    display: none;
 }
+
+/* ---------------------- */
+/* Canvas Graphics Screen */
+/* ---------------------- */
+
 
 
