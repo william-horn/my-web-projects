@@ -43,4 +43,12 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 */
 
 
+#canvas-window {
+    margin-bottom: 10vh;
+}
+
+p {
+    display: inline;
+}
+
 

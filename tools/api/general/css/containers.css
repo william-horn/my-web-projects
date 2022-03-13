@@ -1,23 +1,4 @@
 
-/* debug block */
-.block, .red-block, .blue-block {
-    background-color: black;
-    width: 200px;
-    height: 200px;
-}
-
-.red-block {
-    background-color: red;
-}
-
-.blue-block {
-    background-color: blue;
-}
-
-.show {
-    border: 1px solid white;
-    background: rgba(0, 0, 0, 0.5);
-}
 
 /* resize element to the user's entire screen dimensions */
 .fill-viewport {
@@ -56,6 +37,51 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
+}
+
+.fit-x {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.half-width {
+    width: 50%;
+}
+
+.half-height {
+    height: 50%;
+}
+
+/* debug block */
+.block, .red-block, .blue-block {
+    background-color: black;
+    width: 200px;
+    height: 200px;
+}
+
+.red-block {
+    background-color: red;
+}
+
+.blue-block {
+    background-color: blue;
+}
+
+.show, .show-red, .show-blue {
+    border: 1px solid white;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+.show-red {
+    border: 1px solid red;
+}
+
+.show-blue {
+    border: 1px solid blue;
+}
+
+.height {
+    height: 200px;
 }
 
 

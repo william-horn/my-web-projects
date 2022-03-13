@@ -16,9 +16,11 @@
     --baseButtonBackgroundColor: #616161;
     --baseInputBackgroundColor: #454545;
 
+    /* default font size */
+    --baseFontSize: 1.4em;
+
     /* base fonts */
-    /* must get link in html: <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;700&display=swap" rel="stylesheet"> */
-    --baseTextFont: 'Source Code Pro', monospace;
+    --baseTextFont: monospace;
 }
 
 /* ------------------- */
@@ -30,16 +32,20 @@
     padding: 0;
     box-sizing: border-box;
 
-    /* debug borders */
-    /* border: 1px solid red; */
+    /* debug border */
+    /* border: 1px solid red !important; */
 
     /* applied default text colors */
     color: var(--baseTextColor);
 
     /* applied default fonts */
-    font-family: var(--baseTextFont);
+    font-family: var(--baseTextFont); 
     /* font-family: 'Press Start 2P', cursive; */
     /* font-family: monospace; */
+}
+
+p, a {
+    font-size: var(--baseFontSize);
 }
 
 a {
@@ -58,6 +64,17 @@ body {
 h1, h2, h3, h4, h5, h6 {
     text-align: center;
     color: var(--baseHeadingTextColor);
+    margin-bottom: 10px;
+    font-size: calc(var(--baseFontSize) + 0.4em);
+}
+
+h1 {
+    font-size: calc(var(--baseFontSize) + 1.6em);
+    margin-bottom: 15px;
+}
+
+header {
+    padding: 15px 10px 10px 10px;
 }
 
 button {
@@ -65,6 +82,7 @@ button {
     padding: 5px 10px;
     background-color: var(--baseButtonBackgroundColor);
     color: var(--baseButtonTextColor);
+    font-size: var(--baseFontSize);
     font-weight: 600;
 }
 
@@ -74,6 +92,7 @@ input {
     background-color: var(--baseInputBackgroundColor);
     font-weight: 900;
     outline: none;
-    padding: 5px 10px;
+    padding: 5px;
+    font-size: calc(var(--baseFontSize) - 0.4em);
 }
 
