@@ -1,0 +1,170 @@
+/*
+? @document-start
+======================
+| GLOBAL PAGE STYLES |
+==================================================================================================================================
+
+? @author:                 William J. Horn
+? @document-name:          global-styles.css
+? @document-created:       03/02/2022
+? @document-modified:      03/02/2022
+? @document-version:       v0.0.0
+
+==================================================================================================================================
+
+? @document-info
+==================
+| ABOUT DOCUMENT |
+==================================================================================================================================
+
+Something soon
+
+==================================================================================================================================
+
+? @document-changelog
+======================
+| DOCUMENT CHANGELOG |
+==================================================================================================================================
+
+* If this program supports changelog records then there should be a 'changelog' folder within the same directory as this program
+file. Learn more about the changelog system here: 
+https://github.com/william-horn/my-coding-conventions/blob/main/document-conventions/about-changelog.txt
+
+==================================================================================================================================
+
+? @document-todo
+=================
+| DOCUMENT TODO |
+==================================================================================================================================
+
+-  
+
+================================================================================================================================== 
+*/
+
+:root {
+    /* theme colors */
+    --theme-primary-text-color: #4c4c4c;
+    --theme-primary-background-color: #1c1c1c;
+    --theme-secondary-background-color: #060606;
+    --theme-primary-heading-text-color: #5de787;
+    --theme-primary-heading-span-text-color: #384c30;
+    --theme-secondary-heading-text-color: #748b6b;
+    --theme-main-background-color: #141414;
+    --theme-input-label-color: #547072;
+    --theme-primary-button-color: white;
+    --theme-primary-button-background-color: #1c1c1c;
+    --theme-primary-button-background-hover-color: #323232;
+    --theme-text-input-border-color: #87a17e;
+    --theme-error-background-color: #401e1e;
+
+    /* theme borders */
+    --theme-text-input-border: 2px solid var(--theme-text-input-border-color);
+
+    /* theme fonts */
+    --theme-primary-heading-font: sans-serif;
+    --theme-primary-text-font: monospace;
+    --theme-placeholder-text-font: monospace;
+    --theme-input-text-font: monospace;
+    --theme-primary-button-font: unset;
+
+    /* general styling */
+    --header-margin: 20px 0 20px 0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    /* @debug-on:start */
+    /* border: 1px solid red; */
+    /* @debug-on:end */
+}
+
+body {
+    background-color: black;
+    /* overflow: hidden; */
+    font-family: var(--theme-primary-text-font);
+}
+
+header {
+    width: 100%;
+    margin-top: 20px;
+    margin-bottom: 30px;
+}
+
+p {
+    color: var(--theme-primary-text-color);
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+label {
+    color: var(--theme-input-label-color);
+    font-size: 1.3em;
+    text-align: right;
+    font-weight: 100;
+}
+
+input {
+    background-color: #0a0a0a;
+    border: 0;
+    font-size: 1em;
+    font-weight: 100;
+    color: white;
+    outline: none;
+    border: 2px solid var(--theme-primary-background-color);
+    padding: 5px 10px;
+    font-family: var(--theme-input-text-font);
+}
+
+input::placeholder {
+    opacity: 0.5;
+    font-family: var(--theme-placeholder-text-font);
+}
+
+input:focus {
+    border: var(--theme-text-input-border);
+    transition-property: border;
+    transition-duration: 0.5s;
+}
+
+button {
+    text-decoration: none;
+    border: none;
+    padding: 10px;
+    background-color: var(--theme-primary-button-background-color);
+    color: var(--theme-primary-button-color);
+    font-size: 1em;
+    font-family: var(--theme-primary-button-font);
+}
+
+/* @bug:start[1.1]:"disabled global button hover until bug fix  */
+/* button:hover {
+    background-color: var(--theme-primary-button-background-hover-color);
+} */
+/* @bug:end[1.1] */
+
+section {
+    width: 50%;
+    margin: 0 auto;
+}
+
+h2, h3 {
+    color: var(--theme-secondary-heading-text-color);
+    /* color: var(--theme-primary-heading-span-text-color); */
+    margin: var(--header-margin);
+    font-weight: 100;
+    font-size: 2em;
+    text-align: center;
+}
+
+h3 {
+    font-size: 1.5em;
+    font-weight: 900;
+}
+
+
+

@@ -1,0 +1,114 @@
+<!-- 
+? @document-start
+==========================
+| NOISY SEARCH MAIN PAGE |
+==================================================================================================================================
+
+? @author:                 William J. Horn
+? @document-name:          index.html
+? @document-created:       03/02/2022
+? @document-modified:      03/02/2022
+? @document-version:       v0.0.0
+
+==================================================================================================================================
+
+? @document-info
+==================
+| ABOUT DOCUMENT |
+==================================================================================================================================
+
+Something soon
+
+==================================================================================================================================
+
+? @document-changelog
+======================
+| DOCUMENT CHANGELOG |
+==================================================================================================================================
+
+* If this program supports changelog records then there should be a 'changelog' folder within the same directory as this program
+file. Learn more about the changelog system here: 
+https://github.com/william-horn/my-coding-conventions/blob/main/document-conventions/about-changelog.txt
+
+==================================================================================================================================
+
+? @document-todo
+=================
+| DOCUMENT TODO |
+==================================================================================================================================
+
+-  
+
+==================================================================================================================================
+ -->
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <title>Noisy Search</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="./assets/css/global-styles.css">
+        <link rel="stylesheet" href="./assets/css/primary-styles.css">
+    </head>
+
+    <body>
+        <header class="main-header">
+            <h1 class="main-heading">Noisy <span>Search<span class="beta-footer">[beta]</span></span></h1>
+            <p>
+                Noisy Search allows you to submit a word or phrase to be searched for within a randomly generated string of characters.
+            </p>
+        </header>
+
+        <div id="output-display-container" class="output-display-container">
+            <p id="search-output">something strange is afoot</p>
+        </div>
+
+        <section class="search-container">
+            <h2>Search Settings</h2>
+            <h3>How To Use:</h3>
+            <p>
+                Enter a word for the program to attempt to generate randomly. Keep in mind, each character is individually randomly generated. So, the longer the word, the lower the probability it will be generated. Thus, taking a longer time to generate.
+            </p>
+            <div class="main-interface">
+                <div class="settings">
+                    <div class="text-input-container">
+                        <div class="input-box">
+                            <label for="word-input">Word to Generate: </label>
+                            <input type="text" name="word-input" id="word-input" placeholder="Example: Coleslaw">
+                        </div>
+                        <div class="input-box">
+                            <label for="length-input">String Length:</label>
+                            <input type="number" name="length-input" id="length-input" placeholder="Must be under 500">
+                        </div>
+                        <div class="input-box">
+                            <label for="gen-speed">Generation Speed:</label>
+                            <input type="number" name="gen-speed" id="gen-speed" placeholder="something">
+                        </div>
+                    </div>
+                    <button id="generate-search-btn" class="generate-search-btn">Generate Search</button>
+                    <button id="cancel-generate-btn" class="cancel-generate-btn">Cancel Search</button>
+                </div>
+                <div class="stats-display">
+                    <h3>Theoretical Probability:</h3>
+                    <div id="hide-default-stats">
+                        <p>Generate a search to load probability info</p>
+                    </div>
+                    <div id="theo-stats-display">
+                    </div>
+                    <h3>Experimental Probability:</h3>
+                    <div id="exp-stats-display" class="exp-stats-display">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <h2>Noisy Search &copy; </h2>
+            <p>By: William J. Horn</p>
+        </footer>
+
+        <script src="main.js"></script>
+    </body>
+</html>
+

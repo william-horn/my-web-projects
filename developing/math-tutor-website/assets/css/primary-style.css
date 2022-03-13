@@ -1,0 +1,351 @@
+/*
+    ======================
+    | PRIMARY CSS STYLES |
+    ==================================================================================================================================
+
+    ? @author:                 William J. Horn
+    ? @document:               primary-styles.css
+    ? @document-created:       02/18/2022
+    ? @document-modified:      02/20/2022
+
+    ----------------------------------------------------------------------------------------------------------------------------------
+
+    ? @document-about
+    ==================
+    | ABOUT DOCUMENT |
+    ==================================================================================================================================
+
+    [Coming Soon]
+
+    ----------------------------------------------------------------------------------------------------------------------------------
+
+    ? @document-changelog
+    ======================
+    | DOCUMENT CHANGELOG |
+    ==================================================================================================================================
+
+    ? @document-changelog-detailed
+    For all changelog history, navigate to the changelog folder within this file's directory and open the file named:
+
+    changelog_<this file's name>(<this file type>)
+
+    Where <this file's name> is the name of this file and <this file type> is this file type's extension. For example, if this
+    file was named "index.html", the changelog file would be named "changelog_index(html)".
+
+    ----------------------------------------------------------------------------------------------------------------------------------
+
+    ? @document-todo
+    =================
+    | DOCUMENT TODO |
+    ==================================================================================================================================
+
+    -   finish nav bar
+    -   finish "about me" section
+
+    ----------------------------------------------------------------------------------------------------------------------------------
+*/
+
+
+/*
+    ? @metadata
+    ==================================================
+    ================== CSS METADATA ==================
+    ==================================================
+*/
+
+
+/*
+    CSS GLOBAL VARIABLES // BEGIN //
+*/
+:root {
+    --theme-lightest-green: #e2ffd2;
+    --theme-light-green: #69897e;
+    --theme-medium-green: #495e57;
+    --theme-dark-green: #394134;
+    --theme-medium-green-box-shadow: #717171;
+
+    --primary-header-font: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
+    --primary-background-img: url(../imgs/math-bg-11.png);
+}
+/* 
+    CSS GLOBAL VARIABLES \\ END \\ 
+*/
+
+
+
+
+/*
+    GLOBAL PROPERTY DEFAULTS // BEGIN // 
+*/
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+/*
+    GLOBAL PROPERTY DEFAULTS \\ END \\
+*/
+
+
+
+
+/* 
+    GLOBAL ELEMENT SELECTORS // BEGIN // 
+*/
+body {
+    height: 2000px;
+    background-image: var(--primary-background-img);
+    background-repeat: no-repeat;
+}
+
+/* 
+@changelog-record:#change[2.0]-"disabled header properties" // BEGIN //
+header {
+    background-color: black;
+    height: 250px;
+}
+@changelog-record:#change[2.0]-"disabled header properties" \\ END \\ 
+*/
+
+nav {
+    background-color: var(--theme-light-green);
+    height: 60px;
+    width: 70%;
+    margin: 0 auto;
+    position: sticky;
+    top: 0;
+    box-shadow: 0 5px 10px black;
+    /* box-shadow: 0 5px black; */
+    z-index: 10;
+}
+
+h1 {
+    color: white;
+    letter-spacing: 3px;
+    text-align: center;
+    font-family: var(--primary-header-font);
+    background-color: var(--theme-light-green);
+    padding: 4px;
+    font-size: 2.25vw;
+    margin: 0 auto;
+}
+
+h2 {
+    color: var(--theme-lightest-green);
+    font-family: var(--primary-header-font);
+    letter-spacing: 2px;
+    font-weight: bold;
+    opacity: 0.5;
+    margin: 20px 20px 20px 0;
+}
+
+p {
+    color: white;
+    font-weight: bold;
+    opacity: 0.6;
+    letter-spacing: 1px;
+}
+
+/* 
+    GLOBAL ELEMENT SELECTORS \\ END \\ 
+*/
+
+
+
+
+/*
+    UTILITY CLASSES // BEGIN //
+*/
+.left-edge-round {
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+}
+
+.right-edge-round {
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.bottom-edge-round {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+.top-edge-round {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.debug {
+    height: 50px;
+    width: 50px;
+    background-color: red;
+}
+/* 
+    UTILITY CLASSES \\ END \\
+*/
+
+
+/*
+    ? @main
+    ==================================================
+    ================== CSS STYLING ===================
+    ==================================================
+*/
+
+
+/*
+    HEADER STYLES // BEGIN //
+*/
+/* @changelog-record:#change[3.0]-"header now scales vertically" // BEGIN // */
+h1 span {
+    color: var(--theme-dark-green);
+}
+
+.header-banner-container {
+    height: 180px;
+    position: relative;
+    background-image: url(../imgs/math-banner-4.png);
+    background-color: var(--theme-medium-green);
+    background-repeat: no-repeat;
+    padding: 10px;
+    box-shadow: 0 5px 10px black;
+}
+
+.header-img {
+    flex: 1;
+    height: 85%;
+    max-width: 15%;
+    object-fit: cover;
+    object-position: top;
+    /* border: 5px solid var(--theme-dark-green); */
+    box-shadow: 0px 0px 15px black;
+    /* box-shadow: 0px 0px 40px var(--theme-lightest-green); */
+}
+
+/* @debug locate using some other method (flex method?) */
+#header-img-center {
+    flex: 2;
+    height: 100%;
+    max-width: 50%;
+    object-position: top;
+    object-fit: cover;
+    border-radius: 10px;
+    /* border: 5px solid var(--theme-dark-green); */
+    box-shadow: 0px 0px 15px black;
+    /* box-shadow: 0px 5px black; */
+    /* box-shadow: 0px 0px 40px var(--theme-lightest-green); */
+    transition: 0.2s;
+    z-index: 2;
+}
+
+.header-banner-container div {
+    height: 100%;
+    width: 60%;
+    margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header-img:hover {
+    transition: 1s;
+    flex: 2;
+    object-position: center;
+    max-width: 20%;
+    height: 90%;
+}
+/* @changelog-record:#change[3.0]-"header now scales vertically" \\ END \\ */
+/*
+    HEADER STYLES \\ END \\
+*/
+
+
+
+
+/*
+    NAV BAR STYLES // BEGIN //
+*/
+nav div {
+    width: 50%;
+    height: 100%;
+    float: right;
+    justify-content: flex-end;
+    align-items: center;
+    display: flex;
+    /* background-color: #32403c; */
+}
+
+nav div a {
+    color: white;
+    font-size: 20px;
+    /* background-color: var(--theme-light-green); */
+    text-align: center;
+    font-family: var(--primary-header-font);
+    padding: 5px;
+    /* box-shadow: 0 0 15px var(--theme-medium-green); */
+    border-radius: 10px;
+    /* text-decoration: none; */
+    min-width: 10%;
+    overflow: hidden;
+    margin-right: 10px;
+    margin-left: 10px;
+    text-overflow: ellipsis;
+}
+
+nav div a:hover {
+    background-color: var(--theme-medium-green);
+}
+
+nav div a:first-of-type {
+    color: var(--theme-lightest-green);
+    box-shadow: 0 0 15px var(--theme-medium-green);
+}
+/*
+    NAV BAR STYLES \\ END \\
+*/
+
+
+
+
+/*
+    MAIN PAGE CONTENT // BEGINS //
+*/
+
+main section {
+    display: flex;
+    justify-content: space-between;
+    margin: 50px auto;
+    /* background-color: black; */
+    padding: 35px;
+    width: 70%;
+}
+
+main section div img {
+    border-radius: 20px;
+    background-color: var(--theme-medium-green);
+    box-shadow: 0 0 10px black;
+    height: 25vw;
+    width: 25vw;
+    object-fit: cover;
+    padding: 20px;
+}
+
+main section article {
+    background-color: var(--theme-medium-green);
+    box-shadow: 0 0 10px black;
+    border: 10px solid var(--theme-light-green);
+    border-radius: 20px;
+    width: 50%;
+
+    padding-left: 20px;
+    padding-right: 20px
+}
+
+
+
+
+/*
+    MAIN PAGE CONTENT \\ ENDS \\
+*/
+

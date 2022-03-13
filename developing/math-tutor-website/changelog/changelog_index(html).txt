@@ -1,0 +1,25 @@
+@changelog-records
+======================
+| CHANGE LOG RECORDS |
+==================================================================================================================================
+
+----------------------------------------------------------------------------------------------------------------------------------
+                                                                                                    | @changelog-date:02/21/2022 |
+                                                                                                    ------------------------------
+@changelog-record:#change[1.0]-hidden
+    [1.0]-"removed header-text-container"
+        *   removed <div class="header-text-container">. this was originally here to solve positioning issues, but has since
+            been replaced with h1{font-size: 2.25vw} to base the header's size on the viewport's view width.
+
+@changelog-record:#change[2.1]
+    [2.0]-"moved nav bar"
+        *   location of nav bar was moved out of <body> into <header> in order to properly align vertically with the rest of 
+            the header as the <h1> font-size changes accordingly to the screen width.
+
+    [2.1]-"fixed nav bar"
+        *   location of nav bar was moved BACK into <body> so that sticky position could work. vertical position problem was 
+            solved by making the height of the <header> tag non-static, instead making the height of the main banner <div> inside
+            the header have a static height. this way the header height can grow vertically with window width, pushing the nav
+            bar down accordingly.
+
+----------------------------------------------------------------------------------------------------------------------------------

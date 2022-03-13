@@ -1,0 +1,79 @@
+
+/* ---------------- */
+/* Global Variables */
+/* ---------------- */
+
+:root {
+    /* base text colors */
+    --baseTextColor: #afafaf;
+    --baseButtonTextColor: white;
+    --baseInputTextColor: white;
+    --baseLinkTextColor: white;
+    --baseHeadingTextColor: white;
+
+    /* base background colors */
+    --basePageBackgroundColor: #303030;
+    --baseButtonBackgroundColor: #616161;
+    --baseInputBackgroundColor: #454545;
+
+    /* base fonts */
+    /* must get link in html: <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;700&display=swap" rel="stylesheet"> */
+    --baseTextFont: 'Source Code Pro', monospace;
+}
+
+/* ------------------- */
+/* Global Declarations */
+/* ------------------- */
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+
+    /* debug borders */
+    /* border: 1px solid red; */
+
+    /* applied default text colors */
+    color: var(--baseTextColor);
+
+    /* applied default fonts */
+    font-family: var(--baseTextFont);
+    /* font-family: 'Press Start 2P', cursive; */
+    /* font-family: monospace; */
+}
+
+a {
+    text-decoration: none;
+    color: var(--baseLinkTextColor);
+}
+
+li {
+    list-style: none;
+}
+
+body {
+    background-color: var(--basePageBackgroundColor);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    text-align: center;
+    color: var(--baseHeadingTextColor);
+}
+
+button {
+    border: none;
+    padding: 5px 10px;
+    background-color: var(--baseButtonBackgroundColor);
+    color: var(--baseButtonTextColor);
+    font-weight: 600;
+}
+
+input {
+    border: none;
+    color: var(--baseInputTextColor);
+    background-color: var(--baseInputBackgroundColor);
+    font-weight: 900;
+    outline: none;
+    padding: 5px 10px;
+}
+

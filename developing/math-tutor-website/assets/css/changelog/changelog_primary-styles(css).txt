@@ -1,0 +1,26 @@
+@changelog-records
+======================
+| CHANGE LOG RECORDS |
+==================================================================================================================================
+
+----------------------------------------------------------------------------------------------------------------------------------
+                                                                                                    | @changelog-date:02/20/2022 |
+                                                                                                    ------------------------------
+@changelog-record:#change[1.0]
+    [1.0]-"removed header-text-container class"
+        *   this class and it's corresponding <div> in the html have been removed after being deemed unnecessary. it's initial
+            purpose was to contain the <h1> tag and act as a background so that the <h1> background could remain invisible, so
+            that only the <h1> borders would be visible.
+
+
+@changelog-record:#change[2.0]
+    [2.0]-"disabled header properties"
+        *   header properties were no longer needed after setting the header text relative to viewport width (vw), and the main 
+            header banner to a constant height (px). the background of the header text is now set by changing the background-color
+            of the <h1>
+
+@changelog-record:#change[3.0]-hidden
+    [3.0]-"general code cleanup"
+        *   sectioned all relevant css code together by separating with comments and whitespace
+
+----------------------------------------------------------------------------------------------------------------------------------

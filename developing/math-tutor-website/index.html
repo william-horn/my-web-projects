@@ -1,0 +1,132 @@
+
+<!--
+    ===========================
+    | MATH TUTOR LANDING PAGE |
+    ==================================================================================================================================
+
+    ? @author:                 William J. Horn
+    ? @document:               index.html
+    ? @document-created:       02/18/2022
+    ? @document-modified:      02/20/2022
+    ? @document-version:       [ALPHA] 1.1
+
+    ----------------------------------------------------------------------------------------------------------------------------------
+
+    ? @document-about
+    ==================
+    | ABOUT DOCUMENT |
+    ==================================================================================================================================
+
+    This is a landing page for a private math tutoring website creatively named "Private Math Tutor". The goal was to push my 
+    novice front-end developer abilities to the max while also using this as an opportunity to establish my coding conventions
+    for HTML and CSS.
+    
+    ----------------------------------------------------------------------------------------------------------------------------------
+
+    ? @document-changelog
+    ======================
+    | DOCUMENT CHANGELOG |
+    ==================================================================================================================================
+
+    ? @document-changelog-detailed
+    For all changelog history, navigate to the changelog folder within this file's directory and open the file named:
+
+    changelog_<this file's name>(<this file type>)
+
+    Where <this file's name> is the name of this file and <this file type> is this file type's extension. For example, if this
+    file was named "index.html", the changelog file would be named "changelog_index(html)".
+
+    ----------------------------------------------------------------------------------------------------------------------------------
+
+    ? @document-todo
+    =================
+    | DOCUMENT TODO |
+    ==================================================================================================================================
+
+    -*  work on the "about me" body of the page
+    
+    -!  fix the nav bar not sticking to the top of the screen on scroll (sticky only works when nav bar is in the <body>, but for
+        position scaling purposes it must be within the <header>)
+
+    ----------------------------------------------------------------------------------------------------------------------------------
+-->
+
+<!DOCTYPE html>
+
+<html>
+
+    <!--
+        ? @metadata
+        ==========================
+        ==== WEBPAGE METADATA ====
+        ==========================
+    -->
+
+    <head>
+        <title>Private Math Tutoring</title>
+        <link rel="stylesheet" href="./assets/css/primary-style.css">
+    </head>
+
+    <!--
+        ? @main
+        ==========================
+        ===== WEBPAGE RENDER =====
+        ==========================
+    -->
+
+    <body>
+
+        <!-- HEADER // BEGIN // -->
+        <header>
+
+            <!-- page primary title heading container -->
+            <!-- @changelog-record:#change[1.0]-"removed header-text-container div" // BEGIN-END \\ -->
+            <h1>Private <span>Math</span> Tutoring</h1>
+
+            <!-- header primary banner -->
+            <div class="header-banner-container">
+                <div>
+                    <img class="header-img left-edge-round" src="./assets/imgs/Snapchat-2086441024.jpg" alt="">
+                    <img id="header-img-center" src="./assets/imgs/S2290001_Moment.jpg" alt="">
+                    <img class="header-img right-edge-round" src="./assets/imgs/Snapchat-1898247583.jpg" alt="">
+                </div>
+            </div>
+
+        </header>
+
+        <!-- primary sticky nav bar -->
+        <!-- @changelog-record:#change[2.1]-"fixed nav bar" // BEGIN // -->
+        <nav class="bottom-edge-round">
+            <div>
+                <a href="#header-img-center"><strong>Home</strong></a>
+                <a href="#header-img-center">Contact</a>
+                <a href="#header-img-center">Appointments</a>
+            </div>
+        </nav>
+        <!-- @changelog-record:#change[2.1]-"fixed nav bar" \\ END \\ -->
+        <!-- HEADER \\ END \\ -->
+
+        <!-- MAIN PAGE CONTENT // BEGIN // -->
+        <main>
+            
+            <section>
+                <article>
+                    <h2>About Me</h2>
+                    <p>
+                        Hello, my name is Will. I do many things. Sometimes I do lots of things. But I never do too many things. It's important to take a break from some things so that you have something to look forward to later.
+                    </p>
+                </article>
+
+                <div>
+                    <img src="./assets/imgs/me1-1.jpg" alt="">
+                </div>
+            </section>
+
+        </main>
+        <!-- MAIN PAGE CONTENT \\ END \\ -->
+        
+    </body>
+
+
+</html>
+
