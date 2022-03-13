@@ -1,0 +1,61 @@
+
+/* debug block */
+.block, .red-block, .blue-block {
+    background-color: black;
+    width: 200px;
+    height: 200px;
+}
+
+.red-block {
+    background-color: red;
+}
+
+.blue-block {
+    background-color: blue;
+}
+
+.show {
+    border: 1px solid white;
+    background: rgba(0, 0, 0, 0.5);
+}
+
+/* resize element to the user's entire screen dimensions */
+.fill-viewport {
+    width: 100vw;
+    height: 100vh;
+}
+
+/* resize element to fill it's parent element */
+.fill-parent {
+    width: 100%;
+    height: 100%;
+}
+
+/* center children of this element vertically */
+.center-children-y {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+/* center the element itself horizontally */
+.center-self-x {
+    display: block;
+    margin: 0 auto;
+}
+
+/* center children of this element horizontally */
+.center-children-x {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* fit all content in parent within vertical viewport */
+.fit-y {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+
