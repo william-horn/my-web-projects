@@ -1,11 +1,11 @@
 /*
 ? @document-start
 ======================
-| PRIMARY STYLESHEET |
+| MAIN PROGRAM LOGIC |
 ==================================================================================================================================
 
 ? @author:                 William J. Horn
-? @document-name:          main-style.css
+? @document-name:          main.js
 ? @document-created:       
 ? @document-modified:      
 ? @document-version:       v0.0.0
@@ -36,7 +36,8 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   
+-   do this
+-   do that
 
 ==================================================================================================================================
 */

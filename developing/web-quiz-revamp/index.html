@@ -6,8 +6,8 @@
 
 ? @author:                 William J. Horn
 ? @document-name:          index.html
-? @document-created:       
-? @document-modified:      
+? @document-created:       03/14/2022
+? @document-modified:      03/14/2022
 ? @document-version:       v0.0.0
 
 ==================================================================================================================================
@@ -47,7 +47,7 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 <html>
     <head>
         <!-- !! Title !! -->
-        <title>Webpage</title>
+        <title>JavaScript Quiz</title>
 
         <!-- !! Metadata !! -->
         <meta charset="utf-8">
@@ -61,14 +61,41 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 
         <!-- !! Local CSS !! -->
         <!-- css libraries -->
-        <link rel="stylesheet" href=""> <!-- base css library -->
-        <link rel="stylesheet" href=""> <!-- other general css libraries -->
+        <link rel="stylesheet" href="../../tools/api/general/css/base.css"> <!-- base css library -->
+        <link rel="stylesheet" href="../../tools/api/general/css/positioning.css">
+        <link rel="stylesheet" href="../../tools/api/general/css/visibility.css">
 
         <!-- main styles -->
         <link rel="stylesheet" href="./resources/workspace/css/main-style.css">
 	</head>
 	
 	<body>
+        <div class="outer-window fill-viewport start-y">
+
+            <div class="top-bar space-apart-x medium-padding">
+                <button>View Highscores</button>
+                <p>Timer: 0</p>
+            </div>
+
+            <div class="inner-window fill-parent center-children-x center-children-y">
+                <header class="intro-screen half-aspect center-all-text center-children-x stack-margin-large show">
+                    <h1>JavaScript Quiz</h1>
+                    <p>Welcome to the JavaScript Quiz! To get started, click the "Start Quiz" button below.</p>
+                    <button>Start Quiz</button>
+                </header>
+
+                <main class="show hide hide-all">
+                    <section>
+                        <h2>Questions</h2>
+                        <ul>
+                            <li>Something</li>
+                        </ul>
+                    </section>
+                </main>
+            </div>
+
+        </div>
+
 		<!-- load main script -->
 		<script type="module" src="./resources/workspace/js/main.js"></script>
 	</body>

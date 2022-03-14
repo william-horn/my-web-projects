@@ -58,6 +58,11 @@
     justify-content: flex-start;
 }
 
+.space-apart-x {
+    display: flex;
+    justify-content: space-between;
+}
+
 .half-width {
     width: 50%;
 }
@@ -87,15 +92,15 @@
     padding: 30px;
 }
 
-.small-stack-margin > * {
+.stack-margin-small > *:not(:last-child) {
     margin-bottom: 5px;
 }
 
-.medium-stack-margin > * {
+.stack-margin-medium > *:not(:last-child) {
     margin-bottom: 15px;
 }
 
-.large-stack-margin > * {
+.stack-margin-large > *:not(:last-child) {
     margin-bottom: 30px;
 }
 

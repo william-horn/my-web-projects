@@ -41,5 +41,29 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 ==================================================================================================================================
 */
 
+/* ------------ */
+/* Outer Window */
+/* ------------ */
+
+/* --------*/
+/* Top Bar */
+/* ------- */
+
+/* ------------ */
+/* Inner Window */
+/* ------------ */
+
+.inner-window {
+    height: 50%;
+}
+
+/* ------------ */
+/* Intro Screen */
+/* ------------ */
+
+.intro-screen, main {
+    width: 40%;
+    height: auto; 
+}
 
 

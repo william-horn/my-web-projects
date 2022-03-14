@@ -1,6 +1,6 @@
 
 
-.show, .show-red, .show-blue {
+.show, .show-red, .show-blue, .show-all > * {
     border: 1px solid white;
     background: rgba(0, 0, 0, 0.5);
 }
@@ -12,6 +12,15 @@
 .show-blue {
     border: 1px solid blue;
 }
+
+.hide {
+    display: none;
+}
+
+.hide-all > * {
+    display: none;
+}
+
 
 .red {background-color: red;}
 .black {background-color: black;}

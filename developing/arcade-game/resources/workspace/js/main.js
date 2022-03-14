@@ -43,6 +43,9 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 
 const $gameGraphicsDisplay = document.querySelector("#main-game-window canvas");
 const gameGraphics = $gameGraphicsDisplay.getContext("2d");
+$gameGraphicsDisplay.parentElement.style.position = "relative";
+$gameGraphicsDisplay.style.position = "absolute";
+
 
 function drawLine(fromX, fromY, toX, toY) {
     gameGraphics.beginPath();
@@ -56,17 +59,21 @@ function rad(deg) {
     return (deg*Math.PI)/180;
 }
 
-let radius = 100;
-let counter = 0;
-let parts = 200;
+let r = 100;
+let i = 0;
+let d = 50;
+
+Math.mod
+
 let routine = setInterval(() => {
-    let theta = rad((1 - counter/parts)*90);
-    let x = Math.cos(theta)*radius;
-    let y = Math.sin(theta)*radius;
+    let theta = rad((1 - i/d)*90);
+    let x = Math.cos(theta)*r;
+    let y = Math.sin(theta)*r;
+
     drawLine(0, 0, x, y);
-    counter++;
-    if (counter > parts) {
+    i++;
+
+    if (i > d) {
         clearInterval(routine);
     }
 }, 100)
-
