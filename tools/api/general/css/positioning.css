@@ -1,6 +1,8 @@
 
 /* debug block */
-.block, .block-red, .block-blue {
+.block, 
+.block-red, 
+.block-blue {
     background-color: black;
     width: 200px;
     height: 200px;
@@ -102,5 +104,25 @@
 
 .stack-margin-large > *:not(:last-child) {
     margin-bottom: 30px;
+}
+
+.children-padding-small > * {
+    padding: 5px;
+}
+
+.children-padding-medium > * {
+    padding: 15px;
+}
+
+.children-padding-large > * {
+    padding: 30px;
+}
+
+.children-half-width > * {
+    width: 50%;
+}
+
+.children-half-height > * {
+    height: 50%;
 }
 

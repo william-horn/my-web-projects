@@ -8,7 +8,7 @@
 ? @document-name:          index.html
 ? @document-created:       03/14/2022
 ? @document-modified:      03/14/2022
-? @document-version:       v0.0.0
+? @document-version:       v2.0.0
 
 ==================================================================================================================================
 
@@ -26,8 +26,7 @@ Coming soon
 | DOCUMENT CHANGELOG |
 ==================================================================================================================================
 
-* If there is a 'changelog' folder within this file directory then information on it's contents can be found here:
-https://github.com/william-horn/my-coding-conventions/blob/main/document-conventions/about-changelog.txt
+Coming soon
 
 ==================================================================================================================================
 
@@ -72,24 +71,69 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 	<body>
         <div class="outer-window fill-viewport start-y">
 
+            <!-- top bar for extra info -->
             <div class="top-bar space-apart-x medium-padding">
                 <button>View Highscores</button>
                 <p>Timer: 0</p>
             </div>
 
-            <div class="inner-window fill-parent center-children-x center-children-y">
-                <header class="intro-screen half-aspect center-all-text center-children-x stack-margin-large show">
+            <!-- inner-window for main content -->
+            <div class="inner-window fill-parent center-children-x center-children-y children-padding-medium">
+
+                <!-- quiz intro heading screen -->
+                <header class="intro-screen half-aspect center-all-text center-children-x stack-margin-large large-padding outline">
                     <h1>JavaScript Quiz</h1>
                     <p>Welcome to the JavaScript Quiz! To get started, click the "Start Quiz" button below.</p>
                     <button>Start Quiz</button>
                 </header>
 
-                <main class="show hide hide-all">
-                    <section>
-                        <h2>Questions</h2>
-                        <ul>
-                            <li>Something</li>
+                <!-- main quiz content -->
+                <main class="outline outline-all hide">
+
+                    <!-- quiz question screen -->
+                    <section aria-labelledby="question-title" class="question-screen center-all-text stack-margin-large hide">
+                        <header>
+                            <h2 id="question-title">Questions</h2>
+                        </header>
+                        <ul class="center-children-x children-half-width">
+                            <li><button>Answer 1</button></li>
+                            <li><button>Answer 2</button></li>
+                            <li><button>Answer 3</button></li>
+                            <li><button>Answer 4</button></li>
                         </ul>
+                        <footer>
+                            <p>done</p>
+                        </footer>
+                    </section>
+
+                    <!-- quiz-finished screen -->
+                    <section aria-labelledby="finish-title" class="finish-screen center-all-text center-children-x stack-margin-medium hide">
+                        <header>
+                            <h2 id="finish-title">Quiz Finished!</h2>
+                        </header>
+                        <p>Your Score: 0</p>
+                        <div>
+                            <label for="">Enter Initials: </label>
+                            <input type="text">
+                            <button>Submit Score</button>
+                        </div>
+                    </section>
+
+                    <!-- view highscores screen -->
+                    <section aria-labelledby="highscores-title" class="highscores-screen stack-margin-large center-children-x hide">
+                        <header>
+                            <h2 id="highscores-title">Highscores:</h2>
+                        </header>
+                        <ul>
+                            <li>WH - 100% | Complete</li>
+                            <li>WH - 100% | Complete</li>
+                            <li>WH - 100% | Complete</li>
+                            <li>WH - 100% | Complete</li>
+                        </ul>
+                        <footer>
+                            <button>Go Back</button>
+                            <button>Clear Scores</button>
+                        </footer>
                     </section>
                 </main>
             </div>

@@ -1,15 +1,18 @@
 
 
-.show, .show-red, .show-blue, .show-all > * {
+.outline, 
+.outline-red, 
+.outline-blue, 
+.outline-all > * {
     border: 1px solid white;
     background: rgba(0, 0, 0, 0.5);
 }
 
-.show-red {
+.outline-red {
     border: 1px solid red;
 }
 
-.show-blue {
+.outline-blue {
     border: 1px solid blue;
 }
 
@@ -21,10 +24,23 @@
     display: none;
 }
 
+.red {
+    background-color: red;
+}
 
-.red {background-color: red;}
-.black {background-color: black;}
-.blue {background-color: blue;}
-.green {background-color: green;}
-.white {background-color: white;}
+.black {
+    background-color: black;
+}
+
+.blue {
+    background-color: blue;
+}
+
+.green {
+    background-color: green;
+}
+
+.white {
+    background-color: white;
+}
 

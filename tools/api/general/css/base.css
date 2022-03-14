@@ -17,7 +17,7 @@
     --baseInputBackgroundColor: #454545;
 
     /* default font size */
-    --baseFontSize: 1.4em;
+    --baseFontSize: 1.4rem; /* 1.4rem base */
 
     /* base fonts */
     --baseTextFont: monospace;
@@ -44,7 +44,7 @@
     /* font-family: monospace; */
 }
 
-p, a {
+p, a, li {
     font-size: var(--baseFontSize);
 }
 
@@ -57,19 +57,26 @@ li {
     list-style: none;
 }
 
+/* all li children should automatically fill their parent */
+li > * {
+    width: 100%;
+    height: 100%;
+}
+
 body {
     background-color: var(--basePageBackgroundColor);
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, 
+h4, h5, h6 {
     text-align: center;
     color: var(--baseHeadingTextColor);
     margin-bottom: 10px;
-    font-size: calc(var(--baseFontSize) + 0.4em);
+    font-size: calc(var(--baseFontSize) + 0.4rem);
 }
 
 h1 {
-    font-size: calc(var(--baseFontSize) + 1.6em);
+    font-size: calc(var(--baseFontSize) + 1.6rem);
     margin-bottom: 15px;
 }
 
@@ -82,6 +89,10 @@ button {
     font-weight: 600;
 }
 
+label {
+    font-size: 1.4rem;
+}
+
 input {
     border: none;
     color: var(--baseInputTextColor);
@@ -89,6 +100,6 @@ input {
     font-weight: 900;
     outline: none;
     padding: 5px;
-    font-size: calc(var(--baseFontSize) - 0.4em);
+    font-size: var(--baseFontSize);
 }
 

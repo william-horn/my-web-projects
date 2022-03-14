@@ -6,8 +6,8 @@
 
 ? @author:                 William J. Horn
 ? @document-name:          main-style.css
-? @document-created:       
-? @document-modified:      
+? @document-created:       03/14/2022
+? @document-modified:      03/14/2022
 ? @document-version:       v0.0.0
 
 ==================================================================================================================================
@@ -41,6 +41,10 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 ==================================================================================================================================
 */
 
+/* ------------- */
+/* Global Styles */
+/* ------------- */
+
 /* ------------ */
 /* Outer Window */
 /* ------------ */
@@ -53,17 +57,50 @@ https://github.com/william-horn/my-coding-conventions/blob/main/document-convent
 /* Inner Window */
 /* ------------ */
 
+/* inner-window container */
 .inner-window {
-    height: 50%;
+    height: 60%;
 }
 
 /* ------------ */
 /* Intro Screen */
 /* ------------ */
 
-.intro-screen, main {
+/* intro screen container */
+.intro-screen, 
+main {
     width: 40%;
     height: auto; 
 }
 
+/* intro screen heading h1 */
+.intro-screen h1 {
+    letter-spacing: 2px;
+    font-size: 2.5rem;
+}
 
+.intro-screen p {
+    font-size: 1.2rem;
+}
+
+/* ---------------- */
+/* Questions Screen */
+/* ---------------- */
+
+
+/* ------------- */
+/* Finish Screen */
+/* ------------- */
+
+.finish-screen h2, 
+.finish-screen header:first-child {
+    margin-bottom: 5px;
+}
+
+.finish-screen p:nth-child(n) {
+    margin-bottom: 30px;
+}
+
+/* ----------------- */
+/* Highscores Screen */
+/* ----------------- */
