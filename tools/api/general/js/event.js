@@ -40,32 +40,35 @@ Coming soon
 ==================================================================================================================================
 */
 
+
+
+function newEvent(name, func, status) {
+
+    return {
+        name: "",
+        status: "",
+        func: undefined,
+    }
+}
+
 export default class Event {
     constructor() {
-        this.connections = {};
+        this.connections = [];
     }
 
-    unbind(name) {
-        delete this.connections[name];
+    disconnectAll(strong) {
+        const connections = this.connections;
+        for (let i = connections.length - 1; i >= 0; i--) {
+            const connection = connections[i];
+            if (!connections.status === "strong"
+        }
+    }
+
+    connect(name, func) {
+        const eventObj = newEvent(name, func, "weak");
     }
 
     bind(name, func) {
-        if (this.connections[name]) {
-            console.log("Event Class: Event name \"" + name + "\" already exists. Overwritting it with new entry.");
-            this.unbind(name);
-        }
-        this.connections[name] = func;
-    }
-
-    fire(...args) {
-        for (let eventName in this.connections) {
-            this.connections[eventName](...args);
-        }
-    }
-
-    unbindAll() {
-        for (let eventName in this.connections) {
-            delete this.connections[eventName];
-        }
+        const eventObj = newEvent(name, func, "strong");
     }
 }
