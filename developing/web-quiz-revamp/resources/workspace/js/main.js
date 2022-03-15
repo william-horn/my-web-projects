@@ -42,7 +42,8 @@ Coming soon
 /* ---------------- */
 /* Import Libraries */
 /* ---------------- */
-import {QuizBuilder, Question} from "./libs/quizbuilder.js"; // get quizbuilder library
+import {QuizBuilder, ChoiceQuestion} from "./libs/quizbuilder.js"; // get quizbuilder library
+import Event from "../../../../../tools/api/general/js/event.js";
 
 /* ----------------------------- */
 /* Get Global Element References */
@@ -63,22 +64,23 @@ const Quiz = new QuizBuilder();
 
 // add questions to quiz
 Quiz.addQuestion(
-    new Question("What is 1+1?")
+    new ChoiceQuestion("What is 1+1?")
         .setChoices("3", "5", "9")
-        .setRightAnswer("2")
+        .setRightAnswers("2")
 );
 
 Quiz.addQuestion(
-    new Question("What is 2+2?")
+    new ChoiceQuestion("What is 2+2?")
         .setChoices("3", "12", "6")
-        .setRightAnswer("4")
+        .setRightAnswers("4")
 );
 
 Quiz.addQuestion(
-    new Question("What is 3+3?")
+    new ChoiceQuestion("What is 3+3?")
         .setChoices("234", "12", "34")
-        .setRightAnswer("6")
+        .setRightAnswers("6")
 );
+
 
 /* ----------------- */
 /* Utility Functions */
@@ -111,20 +113,26 @@ function startQuiz() {
 
 }
 
+/*
 Quiz.setDuration(10);
 Quiz.onTimerUpdate.connect("timerUpdate", (tl) => console.log(tl));
 Quiz.onStateChanged.connect("statechanged", (state) => console.log("new state:", state));
 Quiz.onQuizFinish.connect("done", (state) => console.log("Quiz Finished", state));
-Quiz.pluckNextQuestion();
-Quiz.pluckNextQuestion();
-Quiz.start();
-Quiz.pluckNextQuestion();
-Quiz.pluckNextQuestion();
 
-Quiz.getCurrentQuestion();
-Quiz.submitAnswer()
-Quiz.submitAnswer()
-Quiz.submitAnswer()
+Quiz.start();
+
+Quiz.getNextQuestion();
+
+Quiz.submitAnswer("one") // attempt 1/3
+Quiz.submitAnswer("two") // attempt 2/3
+Quiz.submitAnswer("three") // attempt 3/3
+Quiz.submitAnswer("four") // attempt 3/3
+
+Quiz.getNextQuestion();
+
+Quiz.submitAnswer("one") // attempt 1/3
+Quiz.submitAnswer("two") // attempt 2/3
+Quiz.submitAnswer("three") // attempt 3/3
 
 Quiz.onAnswerSubmit() // fires when an answer is submitted
 Quiz.onQuestionCompleted() // fires when a question is completed
@@ -133,5 +141,18 @@ Quiz.onQuestionCompleted() // fires when a question is completed
 setTimeout(() => {
     Quiz.pluckNextQuestion();
 }, 3000);
+*/
+
+
+const event = new Event();
+
+event.strongConnect("click", () => {
+    console.log("fired")
+});
+
+event.fire();
+event.disconnectAll();
+event.fire();
+
 
 $(".intro-screen button").click(() => startQuiz());
