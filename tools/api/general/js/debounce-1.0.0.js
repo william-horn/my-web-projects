@@ -110,7 +110,7 @@ class DebounceData {
     }
 
     setState(state, override=false) {
-        // !debStates[state] ==> return if state is invalid type
+        // (!debStates[state]) ==> return if state is invalid type
         // OR
         // (this.stateTimeoutRoutine && !override) ==> return if a stateTimeoutRoutine exists with no override
         if ((this.stateTimeoutRoutine && !override) || !debStates[state]) return;

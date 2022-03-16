@@ -35,7 +35,7 @@ tool using folders, txt files with information, and your text editor's search fu
 Recording a change made to a document (using this system) is done by creating a "change record". A change record is a plain-text
 entry within the local changelog file. Each directory containing a program file that wishes to keep a changelog will have a 
 folder called "changelog" inside of it. Inside this folder are text files that are named after the program file it is tracking. 
-So, if a program file is named "index.html", then its changelog file will be named "record_index(html).txt" which is inside 
+So, if a program file is named "index.html", then its changelog file will be named "index.html.txt" which is inside 
 of the changelog folder. The hierarchy will look something like this:
 
 
@@ -45,7 +45,7 @@ of the changelog folder. The hierarchy will look something like this:
         |
         |__changelog
             |
-            |__record_program-file(html).txt
+            |__program-file.html.txt
 
 
 There will only be one changelog folder per directory. Tracking another program file does not require creating another changelog 

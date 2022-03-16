@@ -41,10 +41,12 @@ Coming soon
 -   Finish 'getNextQuestion' function --DONE
 -   Finish 'submitAnswer' function --DONE
 
+-   Add a built-in api for interacting with GUI quiz components --NOT DONE [BETA]
 -   Add skippable questions --NOT DONE
 -   Add quiz mode where each question has a time limit --NOT DONE
 -   Add more options to TextboxQuestion class --NOT DONE
 -   Add build-in localstorage api --NOT DONE
+-   Add quiz results analytics -- NOT DONE
 
 -   It looks like allowing the Question objects to have mutable states may not be necessary or optimal. I will have to reset
     these Question states at the beginning of the quiz since they have changed from last quiz session. It may be more 
@@ -54,7 +56,7 @@ Coming soon
 */
 
 import gutil from "../../general/js/gutil-1.0.0.js";
-import Event from "../../general/js/event-maker-2.0.0.js";
+import PseudoEvent from "../../general/js/pseudo-events-2.0.0.js";
 import DynamicState from "../../general/js/dystates-1.0.0.js";
 
 const quizStates = {
@@ -78,6 +80,8 @@ export class QuizBuilder extends DynamicState {
 
         // objects
         this.questions = [];
+        this.eventListeners = new Map(); // BETA
+        this.guis = {}; // BETA
 
         // primitives
         this.questionIndex = 0;
@@ -90,15 +94,25 @@ export class QuizBuilder extends DynamicState {
         this.currentQuestion = undefined;
 
         // events
-        this.onQuizFinish = new Event(); // fires when quiz finishes
-        this.onTimerUpdate = new Event(); // fires every timer tick interval
-        this.onAnswerSubmit = new Event(); // fires when an answer is submitted
-        this.onQuestionCompleted = new Event(); // fires when a question has completed
+        this.onQuizFinish = new PseudoEvent(); // fires when quiz finishes
+        this.onTimerUpdate = new PseudoEvent(); // fires every timer tick interval
+        this.onAnswerSubmit = new PseudoEvent(); // fires when an answer is submitted
+        this.onQuestionCompleted = new PseudoEvent(); // fires when a question has completed
     }
 
     // ** Getters **
     getQuestions() {
         return this.questions;
+    }
+
+    // BETA
+    getGui(name) {
+        return this.guis[name];
+    }
+
+    // BETA
+    getScreenFromName(name) {
+        return typeof(name) === "string" ? this.guis[name] : name;
     }
 
     getIncorrectAnswers() {
@@ -194,6 +208,11 @@ export class QuizBuilder extends DynamicState {
         }
     }
 
+    // BETA
+    setGui(name, gui) {
+        this.guis[name] = gui;
+    }
+
     // state-specific method criteria: not "active"
     setDuration(time) {
         if (this.isState("active")) return;
@@ -231,9 +250,59 @@ export class QuizBuilder extends DynamicState {
         this.setTimeLeft(this.timeLeft + amount);
     }
 
+    // BETA
+    listen(eventName, screen, func) {
+        screen = this.getScreenFromName(screen); 
+
+        // get event data
+        const eventListeners = this.eventListeners;
+        const eventData = eventListeners.get(screen);
+
+        // if old event data doesn't exist, create new data
+        if (!eventData) {
+            eventData = [/* {gui: screen, eventName: "", func: () => {}} */];
+            eventListeners.set(screen, eventData);
+        }
+
+        // update existing event data with new listener
+        eventData.push({
+            gui: screen,
+            eventName: eventName,
+            func: func
+        });
+
+        // add listener to object
+        screen.addEventListener(eventName, func);
+    }
+
+    // BETA
+    stopListening(eventName, screen, func) {
+        screen = this.getScreenFromName(screen);
+
+        // get event data
+        const eventListeners = this.eventListeners;
+        const eventData = eventListeners.get(screen);
+
+        if (!eventData) return; // exit if no data exists
+
+        // remove event listeners that match event name, screen, and function literal
+        for (let i in eventData) {
+            const listener = eventData[i];
+            if (listener.eventName === eventName && listener.func === func) {
+                screen.removeEventListener(eventName, func);
+                eventData.splice(i, 1);
+            }
+        }
+
+        // if no event listeners exist remove screen from map
+        if (eventData.length === 0) {
+            eventListeners.delete(screen);
+        }
+    }
+
+
     start() {
         if (this.isState("active")) return;
-        console.log("The quiz has begun!");
         this.setState("active");
         this.timeLeft = this.duration;
 
@@ -261,7 +330,7 @@ export class QuizBuilder extends DynamicState {
         this.score = 0;
         this.currentQuestion = undefined;
 
-        // reset question objects
+        // reset question objects... "meh" solution
         const questions = this.questions;
         for (let i = 0; i < questions.length; i++) {
             questions[i].reset();

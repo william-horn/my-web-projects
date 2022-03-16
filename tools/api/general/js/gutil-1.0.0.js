@@ -43,30 +43,35 @@ Coming soon
 
 const gutil = {}
 
-gutil.randomInt = function(min, max) {
+function randomInt(min, max) {
     if (!max) { max = min; min = 0; }
     [min, max] = [Math.floor(min), Math.floor(max)];
     return min + Math.floor((max - min + 1)*Math.random());
 }
 
-gutil.randomizeArray = function(array) {
+function randomizeArray(array) {
     for (let i = 0; i < array.length; i++) {
-        let randIndex = this.randomInt(i, array.length - 1);
+        const randIndex = randomInt(i, array.length - 1);
         [array[i], array[randIndex]] = [array[randIndex], array[i]];
     }
     return array;
 }
 
-gutil.weakCloneArray = function(array) {
-    let newArray = [];
+function weakCloneArray(array) {
+    const newArray = [];
     for (let i = 0; i < array.length; i++) {
         newArray[i] = array[i];
     }
     return newArray;
 }
 
-gutil.getRandomIndex = function(array) {
+function getRandomIndex(array) {
     return array[randomInt(array.length - 1)];
 }
+
+gutil.getRandomIndex = getRandomIndex;
+gutil.randomInt = randomInt;
+gutil.randomizeArray = randomizeArray;
+gutil.weakCloneArray = weakCloneArray;
 
 export default gutil;

@@ -26,7 +26,11 @@
 | ABOUT API |
 ==================================================================================================================================
 
-Coming soon
+datastore.get(name)
+datastore.set(name, "this", 500)
+datastore.update(name, oldData => {
+    oldData.push(new data)
+})
 
 ==================================================================================================================================
 
@@ -35,13 +39,38 @@ Coming soon
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   
+-   Add function that returns how full the localStorage is --NOT DONE
+-   Add cache? --REMINDER
 
 ==================================================================================================================================
 */
 
+const datastore = {}
 
+datastore.get = function(datakey, def) {
+    let oldData = localStorage.getItem(datakey);
 
+    if (!oldData) {
+        oldData = def || [];
+    } else {
+        oldData = JSON.parse(oldData);
+    }
 
+    return oldData;
+}
 
+datastore.set = function(datakey, key, value) {
+    const oldData = this.get(datakey, {});
+    oldData[key] = value;
+    localStorage.setItem(datakey, JSON.stringify(oldData));
+}
 
+datastore.remove = function(datakey) {
+    localStorage.removeItem(datakey);
+}
+
+datastore.clear = function(datakey) {
+    localStorage.clear();
+}
+
+export default datastore

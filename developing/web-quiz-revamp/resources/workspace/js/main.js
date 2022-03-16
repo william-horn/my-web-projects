@@ -49,6 +49,8 @@ import {
     TextboxQuestion
 } from "../../../../../tools/api/dedicated/js/quiz-builder-2.0.0.js";
 
+import EventHandler from "../../../../../tools/api/general/js/event-handler.1.0.0.js";
+
 /* ----------------------------- */
 /* Get Global Element References */
 /* ----------------------------- */
@@ -81,12 +83,6 @@ Quiz.addQuestion(
         .setMaxAttempts(9)
 );
 
-Quiz.addQuestion(
-    new TextboxQuestion("What is 3+3?")
-        .setRightAnswers("6")
-        .setMaxAttempts(2)
-);
-
 
 /* ----------------- */
 /* Utility Functions */
@@ -114,58 +110,30 @@ function switchScreen(newScreen) {
     $(prevScreen).parent().hide();
 }
 
+function getNextQuestion() {
+    
+}
+
 function startQuiz() {
     switchScreen(questionScreen);
+
+    const handler = new EventHandler();
+
+    handler.add("click", questionScreen, function() {
+        console.log("hi")
+    });
+
+    handler.pauseAll()
+
+    setTimeout(() => {
+        console.log("paused global");
+        handler.pause();
+    }, 4000);
+
 
 }
 
 
-Quiz.setDuration(5);
-Quiz.onQuestionCompleted.connect((q) => {
-    console.log("QUESTION COMPLETED WITH STATE: " + q.state + ".");
-});
-Quiz.onQuizFinish.connect(thing => {
-    console.log("the quiz has finished! state: ", thing, " score:", Quiz.getFormattedScore());
-});
-Quiz.onAnswerSubmit.connect(q => {
-    console.log("answer submitted: ", q);
-});
-Quiz.start();
-
-Quiz.getNextQuestion(); // correct = 2, attempts = 1
-Quiz.submitAnswer("2"); // correct
-
-Quiz.getNextQuestion(); // correct = 4, attempts = 9
-Quiz.submitAnswer("3"); // unanswered
-
-Quiz.getNextQuestion(); // correct = 6, attempts = 2
-Quiz.submitAnswer("100");
-Quiz.submitAnswer("6");
-
-Quiz.getNextQuestion();
-Quiz.getNextQuestion();
-Quiz.getNextQuestion();
-Quiz.getNextQuestion();
-
-
- 
-
-setTimeout(() => {
-    Quiz.start();
-
-    const question = Quiz.getNextQuestion();
-    console.log("First question: ", question.title);
-    Quiz.submitAnswer("2");
-    
-    Quiz.getNextQuestion();
-    Quiz.submitAnswer("3");
-    
-    Quiz.getNextQuestion();
-    Quiz.submitAnswer("asd");
-    Quiz.submitAnswer("6");
-
-    Quiz.getNextQuestion();
-}, 10000);
 
 
 $(".intro-screen button").click(() => startQuiz());

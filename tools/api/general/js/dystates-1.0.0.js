@@ -40,7 +40,7 @@ Coming soon
 ==================================================================================================================================
 */
 
-import Event from "./event-maker-2.0.0.js";
+import PseudoEvent from "./pseudo-events-2.0.0.js";
 
 export default class DynamicState {
     constructor(states) {
@@ -48,7 +48,7 @@ export default class DynamicState {
         this.state = "initial"; // default state
 
         // events
-        this.onStateChanged = new Event();
+        this.onStateChanged = new PseudoEvent();
     }
 
     getState() {

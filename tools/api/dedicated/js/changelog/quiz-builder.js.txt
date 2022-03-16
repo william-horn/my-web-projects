@@ -1,0 +1,74 @@
+? @document-start
+==================
+| CHANGELOG FILE |
+==================================================================================================================================
+
+? @author:                 William J. Horn
+? @document-name:          quiz-builder.js.txt
+? @document-created:       03/15/2022
+? @document-modified:      03/15/2022
+
+==================================================================================================================================
+
+? @document-info
+=========
+| ABOUT |
+==================================================================================================================================
+
+This file is where all of the documented change records are stored.
+
+==================================================================================================================================
+
+? @changelog-records
+======================
+| CHANGE LOG RECORDS |
+==================================================================================================================================
+
+    ============================
+    | @changelog-version:2.0.0 |
+    ============================
+
+        ---------------------------------------------------------------------------------------------------------------------------
+                                                                                                     | @changelog-date:03/15/2022 |
+                                                                                                     ------------------------------
+        @changelog-record:log[1.0]
+            -   QuizBuilder 2.0 Released
+
+                QuizBuilder 1.0 had some pretty ugly supplement hacks, and a decent amount of bugs. With the release of 
+                QuizBuilder 2.0, all of the previous bugs and hacks were patched. Some of these patches included:
+
+                    * Replaced some optional callbacks with events
+                    * Replaced pre-established events set in place by QuizBuilder with more logically structured code
+                    * Quiz score is now calculated after question completion instead of on every method call
+                    * Removed Question events as they were deemed unnecessary
+                
+                Big conceptual changes were made to the module as well. For instance, a big issue was figuring out how to make 
+                the Question object interact and communicate with the main QuizBuilder object. Previously, QuizBuilder handled
+                this by listening for a "onAnswer" event on the Question object. When this event fired, QuizBuilder would
+                update it's internal states with the callback data that the event provided. Using an event for this communication
+                was unnecessary and posed potential bugs. Now, QuizBuilder has it's own methods for handling answer submission
+                and the developer no longer needs to interact with the Question object as an API.
+
+                Old Example:
+
+                    const question = Quiz.getNextQuestion();
+                    question.answer("some answer");
+
+                New Example:
+
+                    Quiz.getNextQuestion();
+                    Quiz.submitAnswer("some answer");
+
+            -   API:
+
+                The old API was split between QuizBuilder and the Question object. Now, the entire API is provided by QuizBuilder.
+                Here is the new documentation:
+
+                * Coming soon
+
+        ---------------------------------------------------------------------------------------------------------------------------
+
+
+==================================================================================================================================
+    
+? @document-end
