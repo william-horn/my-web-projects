@@ -16,7 +16,7 @@ export default class DynamicState {
 
     setState(state) {
         if (!this.states[state]) {
-            console.error("Error: No such state exists");
+            console.error("DynamicState Class: '" + state + "' is not a valid state");
             return;
         }
 

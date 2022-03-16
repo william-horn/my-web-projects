@@ -42,7 +42,13 @@ Coming soon
 /* ---------------- */
 /* Import Libraries */
 /* ---------------- */
-import {QuizBuilder, ChoiceQuestion} from "./libs/quizbuilder.js"; // get quizbuilder library
+// get quizbuilder api
+import {
+    QuizBuilder, 
+    ChoiceQuestion,
+    TextboxQuestion
+} from "./libs/quizbuilder.js";
+
 import Event from "../../../../../tools/api/general/js/event.js";
 
 /* ----------------------------- */
@@ -67,18 +73,20 @@ Quiz.addQuestion(
     new ChoiceQuestion("What is 1+1?")
         .setChoices("3", "5", "9")
         .setRightAnswers("2")
+        .setMaxAttempts(1)
 );
 
 Quiz.addQuestion(
     new ChoiceQuestion("What is 2+2?")
         .setChoices("3", "12", "6")
         .setRightAnswers("4")
+        .setMaxAttempts(9)
 );
 
 Quiz.addQuestion(
-    new ChoiceQuestion("What is 3+3?")
-        .setChoices("234", "12", "34")
+    new TextboxQuestion("What is 3+3?")
         .setRightAnswers("6")
+        .setMaxAttempts(2)
 );
 
 
@@ -113,46 +121,49 @@ function startQuiz() {
 
 }
 
-/*
-Quiz.setDuration(10);
-Quiz.onTimerUpdate.connect("timerUpdate", (tl) => console.log(tl));
-Quiz.onStateChanged.connect("statechanged", (state) => console.log("new state:", state));
-Quiz.onQuizFinish.connect("done", (state) => console.log("Quiz Finished", state));
 
+Quiz.setDuration(5);
+Quiz.onQuestionCompleted.connect((q) => {
+    console.log("QUESTION COMPLETED WITH STATE: " + q.state + ".");
+});
+Quiz.onQuizFinish.connect(thing => {
+    console.log("the quiz has finished!", thing);
+});
+Quiz.onAnswerSubmit.connect(q => {
+    console.log("answer submitted: ", q);
+});
 Quiz.start();
 
+Quiz.getNextQuestion(); // correct = 2, attempts = 1
+Quiz.submitAnswer("0"); // correct
+
+Quiz.getNextQuestion(); // correct = 4, attempts = 9
+Quiz.submitAnswer("3"); // unanswered
+
+Quiz.getNextQuestion(); // correct = 6, attempts = 2
+Quiz.submitAnswer("100");
+// Quiz.submitAnswer("100");
+
+Quiz.getNextQuestion();
+Quiz.getNextQuestion();
+Quiz.getNextQuestion();
 Quiz.getNextQuestion();
 
-Quiz.submitAnswer("one") // attempt 1/3
-Quiz.submitAnswer("two") // attempt 2/3
-Quiz.submitAnswer("three") // attempt 3/3
-Quiz.submitAnswer("four") // attempt 3/3
 
-Quiz.getNextQuestion();
+ // 
 
-Quiz.submitAnswer("one") // attempt 1/3
-Quiz.submitAnswer("two") // attempt 2/3
-Quiz.submitAnswer("three") // attempt 3/3
+// setTimeout(() => {
+//     Quiz.start();
 
-Quiz.onAnswerSubmit() // fires when an answer is submitted
-Quiz.onQuestionCompleted() // fires when a question is completed
-
-
-setTimeout(() => {
-    Quiz.pluckNextQuestion();
-}, 3000);
-*/
-
-
-const event = new Event();
-
-event.strongConnect("click", () => {
-    console.log("fired")
-});
-
-event.fire();
-event.disconnectAll();
-event.fire();
+//     const question = Quiz.getNextQuestion();
+//     console.log("First question: ", question.title);
+//     Quiz.submitAnswer("2");
+    
+//     Quiz.getNextQuestion();
+//     Quiz.submitAnswer("3");
+    
+//     Quiz.getNextQuestion();
+// }, 10000);
 
 
 $(".intro-screen button").click(() => startQuiz());

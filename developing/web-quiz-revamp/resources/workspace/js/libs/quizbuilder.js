@@ -39,10 +39,11 @@ Coming soon
 ==================================================================================================================================
 
 -   Add skippable questions
--   Add support for multiple question attempts
--   Add support for multiple right answers
+-   Add support for multiple question attempts --DONE
+-   Add support for multiple right answers --DONE
 -   Finish 'getNextQuestion' function
 -   Finish 'submitAnswer' function
+-   Add quiz mode where each question has a time limit
 
 ==================================================================================================================================
 */
@@ -103,6 +104,10 @@ export class QuizBuilder extends DynamicState {
         return this.correctAnswers;
     }
 
+    getQuestionNumber() {
+        return this.questionNumber;
+    }
+
     getFormattedScore() {
         return /[^\.]+.?.?/.exec(this.score.toString()) + "%";
     }
@@ -115,12 +120,33 @@ export class QuizBuilder extends DynamicState {
     // state-specific method criteria: "active"
     getCurrentQuestion() {
         if (!this.isState("active")) return;
-        this.currentQuestion = this.questions[this.questionIndex];
         return this.currentQuestion;
     }
 
+    // state-specific method criteria: "active"
     getNextQuestion() {
+        if (!this.isState("active")) return;
 
+        const prevQuestion = this.currentQuestion;
+        const currentQuestion = this.questions[this.questionIndex];
+
+        if (prevQuestion && prevQuestion.isState("unanswered")) {
+            this.onQuestionCompleted.fire(prevQuestion);
+        }
+
+        // if no next question, reset the quiz
+        if (this.questionIndex >= this.questions.length) {
+            this.setState("complete");
+            this.reset();
+            return;
+        }
+
+        // update new question
+        this.currentQuestion = currentQuestion;
+        this.questionIndex++;
+        this.questionNumber = Math.min(this.questions.length, this.questionNumber + 1);
+
+        return currentQuestion;
     }
 
     // ** Setters **
@@ -132,9 +158,40 @@ export class QuizBuilder extends DynamicState {
         const question = this.getCurrentQuestion();
         const quizLength = this.questions.length;
 
+        // if the question is answered, then exit
+        if (!question.isState("unanswered")) return;
+
+        // fire answer submitted event
+        question.addAttempt();
+
+        // handle if answer is right
+        if (question.isRightAnswer(input)) { // user is correct
+            question.setState("correct");
+            this.correctAnswers++;
+
+        } else if (question.isMaxAttempts()) { // user is wrong and is out of attempts
+            question.setState("incorrect");
+
+        } else { // question is wrong but has more attempts
+            this.onAnswerSubmit.fire(question);
+            return;
+        }
+
+        // when the question has completed
+        this.score = this.correctAnswers/quizLength*100;
+        this.onAnswerSubmit.fire(question);
+        this.onQuestionCompleted.fire(question);
+
+        // if this was the last question, reset the quiz with a state of "complete"
+        if (this.questionNumber >= quizLength) {
+            this.setState("complete");
+            this.reset();
+        }
     }
 
+    // state-specific method criteria: not "active"
     setDuration(time) {
+        if (this.isState("active")) return;
         this.duration = time;
         this.timeLeft = time;
     }
@@ -171,6 +228,7 @@ export class QuizBuilder extends DynamicState {
 
     start() {
         if (this.isState("active")) return;
+        console.log("The quiz has begun!");
         this.setState("active");
         this.timeLeft = this.duration;
 
@@ -189,11 +247,12 @@ export class QuizBuilder extends DynamicState {
 
         // clear timer interval
         clearInterval(this.timerRoutine);
-        this.timerRoutine = null; // *this line is no longer necessary but will keep in case future use is needed
+        this.timerRoutine = null; // this line is no longer necessary but will keep in case future use is needed
 
         this.questionIndex = 0;
         this.correctAnswers = 0;
         this.score = 0;
+        this.currentQuestion = undefined;
     }
 }
 
@@ -216,13 +275,23 @@ class Question extends DynamicState {
         return this.rightAnswers.find(ans => input === ans) ? true : false;
     }
 
+    isMaxAttempts() {
+        return this.attempts >= this.maxAttempts;
+    }
+
     setMaxAttempts(max) {
-        this.maxAttempts = Math.min(1, max);
+        this.maxAttempts = Math.max(1, max);
+        return this;
     }
 
     setRightAnswers(...args) {
         this.rightAnswers = [...args];
         return this;
+    }
+
+    addAttempt() {
+        if (this.isMaxAttempts()) return;
+        this.attempts = Math.min(this.maxAttempts, this.attempts + 1);
     }
 }
 
