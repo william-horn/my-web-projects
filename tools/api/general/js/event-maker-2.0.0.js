@@ -8,7 +8,7 @@
 ? @document-name:          event.js
 ? @document-created:       03/08/2022
 ? @document-modified:      03/15/2022
-? @document-version:       v1.0.0
+? @document-version:       v2.0.0
 
 ==================================================================================================================================
 
@@ -51,7 +51,7 @@ Event.factoryConnect("click", () => {})     // cannot disconnect once set
 Event.factoryConnect(() => {})              // cannot disconnect once set
 */
 
-import DynamicState from "./dynamicstate.js";
+import DynamicState from "./dystates-1.0.0.js";
 
 const connectionStates = {
     "factory": "factory", // immutable event (cannot disconnect)
@@ -81,14 +81,7 @@ export default class Event {
         for (let i in connections) {
             const connection = connections[i];
             if (connection.isMutable(override)) {
-                /*
-                delete if: 
-                    state is weak
-                    OR state is strong and has override
-                    AND state is not factory
-                */
                 connections.splice(i, 1);
-                console.log("disconnected all: ", connection.name, connection);
             }
         }
     }
@@ -99,9 +92,6 @@ export default class Event {
             const connection = connections[i];
             if (connection.name === name && connection.isMutable(override)) {
                 connections.splice(i, 1);
-                console.log("disconnected event name: ", name, connection);
-            } else {
-                console.log("could not disconnect event: ", connection);
             }
         }
     }
@@ -113,13 +103,11 @@ export default class Event {
         }
     }
 
-
     // create weak connection
     connect(name, func) {
         const connection = new Connection(name, func);
         connection.setState("weak");
         this.connections.push(connection);
-        console.log("connected: ", connection);
     }
 
     // create strong connection

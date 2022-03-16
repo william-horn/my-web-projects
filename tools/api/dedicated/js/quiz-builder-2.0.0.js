@@ -1,5 +1,3 @@
-
-
 /*
 ? @document-start
 ====================
@@ -38,19 +36,26 @@ Coming soon
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   Add skippable questions
 -   Add support for multiple question attempts --DONE
 -   Add support for multiple right answers --DONE
--   Finish 'getNextQuestion' function
--   Finish 'submitAnswer' function
--   Add quiz mode where each question has a time limit
+-   Finish 'getNextQuestion' function --DONE
+-   Finish 'submitAnswer' function --DONE
+
+-   Add skippable questions --NOT DONE
+-   Add quiz mode where each question has a time limit --NOT DONE
+-   Add more options to TextboxQuestion class --NOT DONE
+-   Add build-in localstorage api --NOT DONE
+
+-   It looks like allowing the Question objects to have mutable states may not be necessary or optimal. I will have to reset
+    these Question states at the beginning of the quiz since they have changed from last quiz session. It may be more 
+    advantageous to just temporarily store the CURRENT question data within the quiz object itself. --REMINDER
 
 ==================================================================================================================================
 */
 
-import gutil from "../../../../../../tools/api/general/js/gutil.js";
-import Event from "../../../../../../tools/api/general/js/event.js";
-import DynamicState from "../../../../../../tools/api/general/js/dynamicstate.js";
+import gutil from "../../general/js/gutil-1.0.0.js";
+import Event from "../../general/js/event-maker-2.0.0.js";
+import DynamicState from "../../general/js/dystates-1.0.0.js";
 
 const quizStates = {
     "inactive": "inactive",
@@ -249,10 +254,18 @@ export class QuizBuilder extends DynamicState {
         clearInterval(this.timerRoutine);
         this.timerRoutine = null; // this line is no longer necessary but will keep in case future use is needed
 
+        // reset quiz properties
         this.questionIndex = 0;
+        this.questionNumber = 1;
         this.correctAnswers = 0;
         this.score = 0;
         this.currentQuestion = undefined;
+
+        // reset question objects
+        const questions = this.questions;
+        for (let i = 0; i < questions.length; i++) {
+            questions[i].reset();
+        }
     }
 }
 
@@ -292,6 +305,11 @@ class Question extends DynamicState {
     addAttempt() {
         if (this.isMaxAttempts()) return;
         this.attempts = Math.min(this.maxAttempts, this.attempts + 1);
+    }
+
+    reset() {
+        this.setState("unanswered");
+        this.attempts = 0;
     }
 }
 

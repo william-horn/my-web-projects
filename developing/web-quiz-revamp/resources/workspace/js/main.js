@@ -47,9 +47,7 @@ import {
     QuizBuilder, 
     ChoiceQuestion,
     TextboxQuestion
-} from "./libs/quizbuilder.js";
-
-import Event from "../../../../../tools/api/general/js/event.js";
+} from "../../../../../tools/api/dedicated/js/quiz-builder-2.0.0.js";
 
 /* ----------------------------- */
 /* Get Global Element References */
@@ -127,7 +125,7 @@ Quiz.onQuestionCompleted.connect((q) => {
     console.log("QUESTION COMPLETED WITH STATE: " + q.state + ".");
 });
 Quiz.onQuizFinish.connect(thing => {
-    console.log("the quiz has finished!", thing);
+    console.log("the quiz has finished! state: ", thing, " score:", Quiz.getFormattedScore());
 });
 Quiz.onAnswerSubmit.connect(q => {
     console.log("answer submitted: ", q);
@@ -135,14 +133,14 @@ Quiz.onAnswerSubmit.connect(q => {
 Quiz.start();
 
 Quiz.getNextQuestion(); // correct = 2, attempts = 1
-Quiz.submitAnswer("0"); // correct
+Quiz.submitAnswer("2"); // correct
 
 Quiz.getNextQuestion(); // correct = 4, attempts = 9
 Quiz.submitAnswer("3"); // unanswered
 
 Quiz.getNextQuestion(); // correct = 6, attempts = 2
 Quiz.submitAnswer("100");
-// Quiz.submitAnswer("100");
+Quiz.submitAnswer("6");
 
 Quiz.getNextQuestion();
 Quiz.getNextQuestion();
@@ -150,20 +148,24 @@ Quiz.getNextQuestion();
 Quiz.getNextQuestion();
 
 
- // 
+ 
 
-// setTimeout(() => {
-//     Quiz.start();
+setTimeout(() => {
+    Quiz.start();
 
-//     const question = Quiz.getNextQuestion();
-//     console.log("First question: ", question.title);
-//     Quiz.submitAnswer("2");
+    const question = Quiz.getNextQuestion();
+    console.log("First question: ", question.title);
+    Quiz.submitAnswer("2");
     
-//     Quiz.getNextQuestion();
-//     Quiz.submitAnswer("3");
+    Quiz.getNextQuestion();
+    Quiz.submitAnswer("3");
     
-//     Quiz.getNextQuestion();
-// }, 10000);
+    Quiz.getNextQuestion();
+    Quiz.submitAnswer("asd");
+    Quiz.submitAnswer("6");
+
+    Quiz.getNextQuestion();
+}, 10000);
 
 
 $(".intro-screen button").click(() => startQuiz());
