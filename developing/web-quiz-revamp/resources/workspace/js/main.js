@@ -119,16 +119,27 @@ function startQuiz() {
 
     const handler = new EventHandler();
 
-    handler.add("click", questionScreen, function() {
+    const event = handler.add("click", questionScreen, function() {
         console.log("hi")
     });
 
-    handler.pauseAll()
+    handler.add("mouseover", questionScreen, function() {
+        console.log("hovered!")
+    });
 
     setTimeout(() => {
-        console.log("paused global");
-        handler.pause();
+        console.log("removed local");
+        console.log(handler.connections);
+        handler.remove(event);
+        handler.remove("mouseover", questionScreen);
+        console.log(handler.connections);
     }, 4000);
+
+    // setTimeout(() => {
+    //     console.log("resumed local, paused global");
+    //     handler.resume("click", questionScreen);
+    //     handler.pauseAll();
+    // }, 7000);
 
 
 }

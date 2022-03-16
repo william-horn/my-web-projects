@@ -35,16 +35,28 @@ Coming soon
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--  Add pause/resume functionality to events
+-   Add support for jQuery --DONE
+-   Add pause/resume functionality to events --DONE
+-   Generalize the retrieval of data from a map/array (maybe as a new utility for gutil?) with a callback
 
 ==================================================================================================================================
 */
 
 import DynamicState from "./dystates-1.0.0.js";
 
+// jQuery support for events
+const isJQ = window.jQuery;
+const eventConnectorName = isJQ? "on" : "addEventListener";
+const eventDisconnectorName = isJQ? "off" : "removeEventListener";
+
 const eventHandlerStates = {
     "listening": "listening",
     "paused": "paused"
+}
+
+// bypass jQuery wrapper
+function getRawObject(object) {
+    return isJQ? object.get(0) : object;
 }
 
 class Listener extends DynamicState {
@@ -58,40 +70,44 @@ class Listener extends DynamicState {
         this.handler = funcHandler;
     }
 
-    pause() {
-        this.setState("paused");
-    }
-
-    resume() {
-        this.setState("listening");
+    disconnect() {
+        this.obj[eventDisconnectorName](this.name, this.handler);
     }
 }
 
 export default class EventHandler extends Listener {
     constructor() {
         super();
+        delete this.disconnect; // don't inherit
         this.connections = new Map();
     }
 
     pauseAll() {
-        super.pause();
+        this.setState("paused");
     }
 
     resumeAll() {
-        super.resume();
+        this.setState("listening");
     }
 
     setAllStates(eventName, object, newState) {
-        const eventData = this.connections.get(object);
-        const selectAll = eventName === "all";
+        if (object) {
+            // args are: eventName=String, object=HTML Element, newState=String
+            const eventData = this.connections.get(getRawObject(object));
+            const selectAll = eventName === "all";
 
-        if (!eventData) return;
+            if (!eventData) return;
 
-        eventData.forEach(function(listener) {
-            if (listener.name === eventName || selectAll) {
-                listener.setState(newState);
-            }
-        })
+            eventData.forEach(listener => {
+                if (listener.name === eventName || selectAll) {
+                    listener.setState(newState);
+                }
+            })
+        } else {
+            // args are: eventName=Listener, object=undefined, newState=String
+            const listener = eventName;
+            listener.setState(newState);
+        }
     }
 
     pause(eventName, object) {
@@ -102,17 +118,57 @@ export default class EventHandler extends Listener {
         this.setAllStates(eventName, object, "listening");
     }
 
-    getListener(object) {
-        return this.connections.get(object);
+    removeAll() {
+        for (let pair of this.connections) {
+            const [rawObj, eventData] = pair;
+            eventData.forEach(listener => listener.disconnect());
+            this.connections.delete(rawObj);
+        }
+    }
+
+    // create utility functions for this later
+    remove(eventName, object) {
+        let rawObj;
+        let eventData;
+
+        if (object) {
+            rawObj = getRawObject(object);
+            eventData = this.connections.get(rawObj); 
+            const selectAll = eventName === "all";
+
+            for (let i in eventData) {
+                const listener = eventData[i];
+                if (listener.name === eventName || selectAll) {
+                    listener.disconnect();
+                    eventData.splice(i, 1);
+                }
+            }
+        } else {
+            const listener = eventName;
+            rawObj = getRawObject(listener.obj);
+            eventData = this.connections.get(rawObj);
+
+            for (let i in eventData) {
+                if (listener === eventData[i]) {
+                    listener.disconnect();
+                    eventData.splice(i, 1);
+                }
+            }
+        }
+
+        if (eventData.length === 0) {
+            this.connections.delete(rawObj);
+        }
     }
 
     add(eventName, object, func) {
-        let eventData = this.connections.get(object);
+        const rawObj = getRawObject(object);
+        let eventData = this.connections.get(rawObj);
 
         // event data for a given object
         if (!eventData) {
             eventData = [];
-            this.connections.set(object, eventData);
+            this.connections.set(rawObj, eventData);
         }
 
         // new individual event listener data
@@ -134,10 +190,8 @@ export default class EventHandler extends Listener {
             }
         }
     
-        if (window.jQuery) {
-            object.on(eventName, funcHandler); // if jQuery library is used
-        } else {
-            object.addEventListener(eventName, funcHandler); // if vanilla js is used
-        }
+        // add js listener
+        object[eventConnectorName](eventName, funcHandler);
+        return localListener;
     }
 }
