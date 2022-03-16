@@ -58,6 +58,7 @@ Coming soon
 import gutil from "../../general/js/gutil-1.0.0.js";
 import PseudoEvent from "../../general/js/pseudo-events-2.0.0.js";
 import DynamicState from "../../general/js/dystates-1.0.0.js";
+import EventHandler from "../../general/js/event-handler.1.0.0.js";
 
 const quizStates = {
     "inactive": "inactive",
@@ -72,6 +73,10 @@ const questionStates = {
     "incorrect": "incorrect",
 }
 
+function handleErr(condition, message) {
+    if (condition) console.error("QuizBuilder: " + message);
+}
+
 export class QuizBuilder extends DynamicState {
     constructor() {
         // call superclass constructor
@@ -80,8 +85,8 @@ export class QuizBuilder extends DynamicState {
 
         // objects
         this.questions = [];
-        this.eventListeners = new Map(); // BETA
         this.guis = {}; // BETA
+        this.listener = new EventHandler(); // BETA
 
         // primitives
         this.questionIndex = 0;
@@ -91,6 +96,7 @@ export class QuizBuilder extends DynamicState {
         this.score = 0;
         this.correctAnswers = 0;
 
+        this.isTimed = false;
         this.currentQuestion = undefined;
 
         // events
@@ -156,7 +162,7 @@ export class QuizBuilder extends DynamicState {
         // if no next question, reset the quiz
         if (this.questionIndex >= this.questions.length) {
             this.setState("complete");
-            this.reset();
+            this.finish();
             return;
         }
 
@@ -204,13 +210,25 @@ export class QuizBuilder extends DynamicState {
         // if this was the last question, reset the quiz with a state of "complete"
         if (this.questionNumber >= quizLength) {
             this.setState("complete");
-            this.reset();
+            this.finish();
         }
     }
 
+    setQuizTimed(state) {
+        if (this.isState("active")) return;
+        this.isTimed = state;
+    }
+
     // BETA
-    setGui(name, gui) {
-        this.guis[name] = gui;
+    addGui(guiName, gui) {
+        handleErr(this.guis[guiName], "Cannot add GUI with name '" + guiName + "' (already exists)");
+        this.guis[guiName] = gui;
+    }
+
+    // BETA 
+    removeGui(guiName) {
+        handleErr(!this.guis[guiName], "Cannot remove GUI with name '" + guiName + "' (does not exist)");
+        delete this.guis[guiName];
     }
 
     // state-specific method criteria: not "active"
@@ -226,7 +244,7 @@ export class QuizBuilder extends DynamicState {
         this.timeLeft = Math.min(this.duration, Math.max(0, amount));
         if (this.timeLeft === 0) {
             this.setState("incomplete");
-            this.reset();
+            this.finish();
         }
     }
 
@@ -251,69 +269,63 @@ export class QuizBuilder extends DynamicState {
     }
 
     // BETA
-    listen(eventName, screen, func) {
-        screen = this.getScreenFromName(screen); 
-
-        // get event data
-        const eventListeners = this.eventListeners;
-        const eventData = eventListeners.get(screen);
-
-        // if old event data doesn't exist, create new data
-        if (!eventData) {
-            eventData = [/* {gui: screen, eventName: "", func: () => {}} */];
-            eventListeners.set(screen, eventData);
-        }
-
-        // update existing event data with new listener
-        eventData.push({
-            gui: screen,
-            eventName: eventName,
-            func: func
-        });
-
-        // add listener to object
-        screen.addEventListener(eventName, func);
+    addListener(eventName, guiName, func) {
+        const gui = this.guis[guiName];
+        handleErr(!gui, "Cannot add listener to GUI '" + guiName + "' (does not exist)");
+        this.listener.add(eventName, gui, func);
     }
 
     // BETA
-    stopListening(eventName, screen, func) {
-        screen = this.getScreenFromName(screen);
-
-        // get event data
-        const eventListeners = this.eventListeners;
-        const eventData = eventListeners.get(screen);
-
-        if (!eventData) return; // exit if no data exists
-
-        // remove event listeners that match event name, screen, and function literal
-        for (let i in eventData) {
-            const listener = eventData[i];
-            if (listener.eventName === eventName && listener.func === func) {
-                screen.removeEventListener(eventName, func);
-                eventData.splice(i, 1);
-            }
-        }
-
-        // if no event listeners exist remove screen from map
-        if (eventData.length === 0) {
-            eventListeners.delete(screen);
-        }
+    pauseListener(eventName, guiName) {
+        const gui = this.guis[guiName];
+        handleErr(!gui, "Cannot pause listener, GUI name does not exist");
+        this.listener.pause(eventName, gui);
     }
 
+    // BETA
+    resumeListener(eventName, guiName) {
+        const gui = this.guis[guiName];
+        handleErr(!gui, "Cannot resume listener, GUI name does not exist");
+        this.listener.resume(eventName, gui);
+    }
+
+    // BETA
+    removeListener(eventName, guiName) {
+        const gui = this.guis[guiName];
+        handleErr(!gui, "Cannot remove listener, GUI name does not exist");
+        this.listener.remove(eventName, gui);
+    }
+
+    // BETA
+    stopListening() {
+        this.listener.pauseAll();
+    }
+
+    // BETA
+    resumeListening() {
+        this.listener.resumeAll();
+    }
+
+    // BETA
+    disconnectListeners() {
+        this.listener.removeAll();
+    }
 
     start() {
         if (this.isState("active")) return;
         this.setState("active");
-        this.timeLeft = this.duration;
 
-        this.onTimerUpdate.fire(this.getTimeLeft()); // fire initial timer update event
-        this.timerRoutine = setInterval(() => {
-            this.subtractTime(1);
-            this.onTimerUpdate.fire(this.getTimeLeft()); // fire timer update every interval
-        }, 1000);
+        if (this.isTimed) {
+            this.timeLeft = this.duration;
+            this.onTimerUpdate.fire(this.getTimeLeft()); // fire initial timer update event
+            this.timerRoutine = setInterval(() => {
+                this.subtractTime(1);
+                this.onTimerUpdate.fire(this.getTimeLeft()); // fire timer update every interval
+            }, 1000);
+        }
     }
 
-    reset() {
+    finish() {
         if (this.isState("inactive")) return;
         // fire onQuizFinish event 
         this.onQuizFinish.fire(this.state);
@@ -329,6 +341,9 @@ export class QuizBuilder extends DynamicState {
         this.correctAnswers = 0;
         this.score = 0;
         this.currentQuestion = undefined;
+
+        // disconnect all event listeners
+        this.disconnectListeners();
 
         // reset question objects... "meh" solution
         const questions = this.questions;

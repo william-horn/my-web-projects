@@ -49,8 +49,6 @@ import {
     TextboxQuestion
 } from "../../../../../tools/api/dedicated/js/quiz-builder-2.0.0.js";
 
-import EventHandler from "../../../../../tools/api/general/js/event-handler.1.0.0.js";
-
 /* ----------------------------- */
 /* Get Global Element References */
 /* ----------------------------- */
@@ -116,31 +114,14 @@ function getNextQuestion() {
 
 function startQuiz() {
     switchScreen(questionScreen);
+    Quiz.addGui("answerContainer", $(questionScreen).children("ul"));
 
-    const handler = new EventHandler();
+    Quiz.addListener("click", "answerContainer", function() {console.log("answers clicked!")});
 
-    const event = handler.add("click", questionScreen, function() {
-        console.log("hi")
-    });
-
-    handler.add("mouseover", questionScreen, function() {
-        console.log("hovered!")
-    });
-
-    setTimeout(() => {
-        console.log("removed local");
-        console.log(handler.connections);
-        handler.remove(event);
-        handler.remove("mouseover", questionScreen);
-        console.log(handler.connections);
-    }, 4000);
-
-    // setTimeout(() => {
-    //     console.log("resumed local, paused global");
-    //     handler.resume("click", questionScreen);
-    //     handler.pauseAll();
-    // }, 7000);
-
+    Quiz.setQuizTimed(false)
+    Quiz.setDuration(10);
+    Quiz.start();
+    
 
 }
 
