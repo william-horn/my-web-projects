@@ -49,6 +49,7 @@ import {
     TextboxQuestion
 } from "../../../../../tools/api/dedicated/js/quiz-builder-2.0.0.js";
 
+
 /* ----------------------------- */
 /* Get Global Element References */
 /* ----------------------------- */
@@ -121,6 +122,8 @@ function startQuiz() {
     Quiz.setQuizTimed(false)
     Quiz.setDuration(10);
     Quiz.start();
+
+    
     
 
 }
