@@ -36,19 +36,42 @@ Coming soon
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   
+?-   Possibly make separate dedicated libraries for:
+-       * Math (randomInt, randomizeArray, ...)
+-       * Time (getClockHour, ...)
+-       * JS Routines (forInterval, ...)
+-       * Native Objects (shallowCopyArray, ...)
 
 ==================================================================================================================================
 */
 
 const gutil = {}
 
+// wrap for-loop logic in a 'setInterval' to achieve delay between loop cycles
+function forInterval(start, stop, step, delay, callback) {
+    let count = start;
+    const routine = setInterval(() => {
+        callback(count);
+        count += step;
+        if (count > stop) clearInterval(routine);
+    }, delay);
+}
+
+// generate math sequence {12, 1, 2, ..., 12, 1, 2, ...} based on given index
+function getClockHour(index) {
+    const time = (index + 11)%12 + 1;
+    const postfix = ~~(index/12)%2 == 0 ? "am" : "pm";
+    return { value: time, timePostfix: postfix }
+}
+
+// uniformly generate a random int between [min, max]
 function randomInt(min, max) {
     if (!max) { max = min; min = 0; }
     [min, max] = [Math.floor(min), Math.floor(max)];
     return min + Math.floor((max - min + 1)*Math.random());
 }
 
+// randomize existing array indices
 function randomizeArray(array) {
     for (let i = 0; i < array.length; i++) {
         const randIndex = randomInt(i, array.length - 1);
@@ -57,7 +80,8 @@ function randomizeArray(array) {
     return array;
 }
 
-function weakCloneArray(array) {
+// clone ordinary data in array (no metadata)
+function shallowCopyArray(array) {
     const newArray = [];
     for (let i = 0; i < array.length; i++) {
         newArray[i] = array[i];
@@ -65,13 +89,17 @@ function weakCloneArray(array) {
     return newArray;
 }
 
+// get random index from array
 function getRandomIndex(array) {
     return array[randomInt(array.length - 1)];
 }
 
+// module utility
 gutil.getRandomIndex = getRandomIndex;
 gutil.randomInt = randomInt;
 gutil.randomizeArray = randomizeArray;
-gutil.weakCloneArray = weakCloneArray;
+gutil.shallowCopyArray = shallowCopyArray;
+gutil.forInterval = forInterval;
+gutil.getClockHour = getClockHour;
 
 export default gutil;

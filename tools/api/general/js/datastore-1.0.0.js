@@ -5,7 +5,7 @@
 ==================================================================================================================================
 
 ? @author:                 William J. Horn
-? @document-name:          localstorage.js
+? @document-name:          datastore.js
 ? @document-created:       03/15/2022
 ? @document-modified:      03/15/2022
 ? @document-version:       v1.0.0
@@ -50,8 +50,10 @@ const datastore = {}
 datastore.get = function(datakey, def) {
     let oldData = localStorage.getItem(datakey);
 
-    if (!oldData) {
-        oldData = def || [];
+    if (!oldData && def === null) {
+        console.error("No previous data was found");
+    } else if (!oldData) {
+        oldData = def;
     } else {
         oldData = JSON.parse(oldData);
     }
@@ -59,10 +61,13 @@ datastore.get = function(datakey, def) {
     return oldData;
 }
 
-datastore.set = function(datakey, key, value) {
-    const oldData = this.get(datakey, {});
-    oldData[key] = value;
-    localStorage.setItem(datakey, JSON.stringify(oldData));
+datastore.update = function(datakey, callback) {
+    const savedData = this.get(datakey);
+    this.save(datakey, callback(savedData));
+}
+
+datastore.save = function(datakey, value) {
+    localStorage.setItem(datakey, JSON.stringify(value));
 }
 
 datastore.remove = function(datakey) {

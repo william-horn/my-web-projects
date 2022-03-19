@@ -70,7 +70,7 @@ debounceFunctionData.isClosed() // returns: false; IF debounce state is set to "
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   
+-   Make DebounceData an extension of the DynamicStates class --NOT DONE
 
 ==================================================================================================================================
 */

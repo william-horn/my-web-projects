@@ -26,8 +26,7 @@ Coming soon
 | DOCUMENT CHANGELOG |
 ==================================================================================================================================
 
-* If there is a 'changelog' folder within this file directory then information on it's contents can be found here:
-https://github.com/william-horn/my-coding-conventions/blob/main/document-conventions/about-changelog.txt
+Coming soon
 
 ==================================================================================================================================
 
