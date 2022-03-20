@@ -27,7 +27,51 @@ This file is a class module meant for creating an interface to interact with a "
 | ABOUT API |
 ==================================================================================================================================
 
-Coming soon
+- Methods 
+
+* quiz state requirement: "inactive"
+* ----------------------------------
+
+Quiz.setQuizTimed([boolean] state)
+QUiz.setDuration([number] time length)
+Quiz.randomizeQuestions()
+Quiz.addQuestion([Question Object] question info)
+Quiz.removeQuestion([number] index)
+Quiz.start()
+
+* quiz state requirement: "active"
+* ----------------------------------
+
+Quiz.getCurrentQuestion()
+Quiz.getNextQuestion()
+Quiz.submitAnswer([string] user input)
+Quiz.setTimeLeft([number] new time left)
+Quiz.addTime([number] time added to time left)
+Quiz.subtractTime([number] time subtracted from time left)
+Quiz.finish()
+
+* quiz state requirement: any state
+* ----------------------------------
+
+addGui([string] gui name, [Object] gui object)
+removeGui([string] gui name)
+getGui([string] gui name)
+getQuestions()
+getGui([string] gui name)
+getScreenFromName([string] gui name) -- private
+getCorrectAnswers()
+getIncorrectAnswers()
+getQuestionNumber)
+getFormattedScore()
+getTimeLeft()
+addListener([string] event name, [string] gui name, [function] callback function)
+pauseListener([string] event name, [string] gui name)
+resumeListener([string] event name, [string] gui name)
+removeListener([string] event name, [string] gui name)
+pauseListening()
+resumeListening()
+removeAllListeners()
+
 
 ==================================================================================================================================
 
@@ -73,8 +117,8 @@ const questionStates = {
     "incorrect": "incorrect",
 }
 
-function handleErr(condition, message) {
-    if (condition) console.error("QuizBuilder: " + message);
+function handleErr(condition, ...args) {
+    if (condition) console.error("QuizBuilder: ", ...args);
 }
 
 export class QuizBuilder extends DynamicState {
@@ -231,9 +275,9 @@ export class QuizBuilder extends DynamicState {
         delete this.guis[guiName];
     }
 
-    // state-specific method criteria: not "active"
+    // state-specific method criteria: "inactive"
     setDuration(time) {
-        if (this.isState("active")) return;
+        if (!this.isState("inactive")) return;
         this.duration = time;
         this.timeLeft = time;
     }
@@ -252,6 +296,18 @@ export class QuizBuilder extends DynamicState {
     addQuestion(question) {
         if (!this.isState("inactive")) return;
         this.questions.push(question);
+    }
+
+    // state-specific method criteria: "inactive"
+    removeQuestion(index) {
+        if (!this.isState("inactive")) return;
+        this.questions.splice(index, 1);
+    }
+
+    // state-specific method criteria: "inactive"
+    clearQuestions() {
+        if (!this.isState("inactive")) return;
+        this.questions.length = 0; // clear questions array
     }
 
     // state-specific method criteria: "inactive"
@@ -297,7 +353,7 @@ export class QuizBuilder extends DynamicState {
     }
 
     // BETA
-    stopListening() {
+    pauseListening() {
         this.listener.pauseAll();
     }
 
@@ -307,12 +363,12 @@ export class QuizBuilder extends DynamicState {
     }
 
     // BETA
-    disconnectListeners() {
+    removeAllListeners() {
         this.listener.removeAll();
     }
 
     start() {
-        if (this.isState("active")) return;
+        if (!this.isState("inactive")) return;
         this.setState("active");
 
         if (this.isTimed) {
@@ -326,7 +382,7 @@ export class QuizBuilder extends DynamicState {
     }
 
     finish() {
-        if (this.isState("inactive")) return;
+        if (!this.isState("active")) return;
         // fire onQuizFinish event 
         this.onQuizFinish.fire(this.state);
         this.setState("inactive");
@@ -343,7 +399,7 @@ export class QuizBuilder extends DynamicState {
         this.currentQuestion = undefined;
 
         // disconnect all event listeners
-        this.disconnectListeners();
+        this.removeAllListeners();
 
         // reset question objects... "meh" solution
         const questions = this.questions;
@@ -416,7 +472,7 @@ export class ChoiceQuestion extends Question {
     }
 
     getChoices() {
-        let choices = gutil.weakCloneArray(this.choices);
+        let choices = gutil.shallowCopyArray(this.choices);
         choices.push(this.rightAnswer);
         return choices;
     }

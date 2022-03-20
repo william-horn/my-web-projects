@@ -1,6 +1,5 @@
 
-
-.outline, 
+.outline,
 .outline-red, 
 .outline-blue, 
 .outline-all > * {
@@ -16,6 +15,13 @@
     border: 1px solid blue;
 }
 
+/* debug block */
+.block {
+    background-color: black;
+    width: 200px;
+    height: 200px;
+}
+
 .hide {
     display: none;
 }
@@ -28,12 +34,12 @@
     background-color: red;
 }
 
-.black {
-    background-color: black;
-}
-
 .blue {
     background-color: blue;
+}
+
+.black {
+    background-color: black;
 }
 
 .green {

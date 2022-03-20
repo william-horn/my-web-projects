@@ -26,12 +26,13 @@
 | ABOUT API |
 ==================================================================================================================================
 
-datastore.get(name)
-datastore.set(name, "this", 500)
-datastore.update(name, oldData => {
-    oldData.push(new data)
-})
+const datakeys = datastore.datakeys;
+datakeys.name1 = "userdata";
 
+datastore.get(datakeys.name1)
+datastore.update(datakeys.name1, oldData => {}) // err, name1 was not given a default in above 'get' request
+
+datastore.get("invalidName", null) // pass second argument as null if you want to throw an error if data name doesn't exist
 ==================================================================================================================================
 
 ? @document-todo
@@ -45,24 +46,43 @@ datastore.update(name, oldData => {
 ==================================================================================================================================
 */
 
-const datastore = {}
+const datastore = {
+    datakeys: {}, // localStorage item keys
+    cache: {}
+}
+
+function handleErr(condition, ...args) {
+    if (condition) console.error(...args);
+    return condition;
+}
 
 datastore.get = function(datakey, def) {
-    let oldData = localStorage.getItem(datakey);
+    let data = localStorage.getItem(datakey);
+    const cachedData = this.cache[datakey];
 
-    if (!oldData && def === null) {
-        console.error("No previous data was found");
-    } else if (!oldData) {
-        oldData = def;
+    if (handleErr(!data && def === null, "No previous data was found")) return;
+
+    if (!data) {
+        data = def;
     } else {
-        oldData = JSON.parse(oldData);
+        data = JSON.parse(data);
     }
 
-    return oldData;
+    if (cachedData === undefined) {
+        this.cache[datakey] = data;
+    }
+
+    return data;
 }
 
 datastore.update = function(datakey, callback) {
     const savedData = this.get(datakey);
+
+    if (savedData === undefined) {
+        savedData = this.cache[datakey];
+        if (handleErr(!savedData, "Attempt to update non-existent data.")) return;
+    }
+
     this.save(datakey, callback(savedData));
 }
 

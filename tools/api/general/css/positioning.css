@@ -1,19 +1,12 @@
 
-/* debug block */
-.block, 
-.block-red, 
-.block-blue {
-    background-color: black;
-    width: 200px;
-    height: 200px;
-}
+:root {
+    --smallPadding: 5px;
+    --mediumPadding: 15px;
+    --largePadding: 30px;
 
-.block-red {
-    background-color: red;
-}
-
-.block-blue {
-    background-color: blue;
+    --smallMargin: 5px;
+    --mediumMargin: 15px;
+    --largeMargin: 30px;
 }
 
 /* resize element to the user's entire screen dimensions */
@@ -29,38 +22,38 @@
 }
 
 /* center children of this element vertically */
-.center-children-y {
+.cent-all-vt {
     display: flex;
     flex-direction: column;
     justify-content: center;
 }
 
 /* center the element itself horizontally */
-.center-self-x {
+.cent-self-hz {
     display: block;
     margin: 0 auto;
 }
 
 /* center children of this element horizontally */
-.center-children-x {
+.cent-all-hz {
     display: flex;
     flex-direction: column;
     align-items: center;
 }
 
 /* fit all content in parent within vertical viewport */
-.start-y {
+.start-top {
     display: flex;
     flex-direction: column;
     justify-content: flex-start;
 }
 
-.start-x {
+.start-left {
     display: flex;
     justify-content: flex-start;
 }
 
-.space-apart-x {
+.space-btwn {
     display: flex;
     justify-content: space-between;
 }
@@ -73,56 +66,56 @@
     height: 50%;
 }
 
-.half-aspect {
+.half-all {
     width: 50%;
     height: 50%;
 }
 
-.center-all-text p {
+.align-all-txt-cent p {
     text-align: center;
 }
 
-.small-padding {
+.sm-p {
+    padding: var(--smallPadding);
+}
+
+.md-p {
+    padding: var(--mediumPadding);
+}
+
+.lg-p {
+    padding: var(--largePadding);
+}
+
+.sm-m-all-vt > *:not(:last-child) {
+    margin-bottom: var(--smallMargin);
+}
+
+.md-m-all-vt > *:not(:last-child) {
+    margin-bottom: var(--mediumMargin);
+}
+
+.lg-m-all-vt > *:not(:last-child) {
+    margin-bottom: var(--largeMargin);
+}
+
+.sm-p-all > * {
     padding: 5px;
 }
 
-.medium-padding {
+.md-p-all > * {
     padding: 15px;
 }
 
-.large-padding {
+.lg-p-all > * {
     padding: 30px;
 }
 
-.stack-margin-small > *:not(:last-child) {
-    margin-bottom: 5px;
-}
-
-.stack-margin-medium > *:not(:last-child) {
-    margin-bottom: 15px;
-}
-
-.stack-margin-large > *:not(:last-child) {
-    margin-bottom: 30px;
-}
-
-.children-padding-small > * {
-    padding: 5px;
-}
-
-.children-padding-medium > * {
-    padding: 15px;
-}
-
-.children-padding-large > * {
-    padding: 30px;
-}
-
-.children-half-width > * {
+.half-width-all > * {
     width: 50%;
 }
 
-.children-half-height > * {
+.half-height-all > * {
     height: 50%;
 }
 
