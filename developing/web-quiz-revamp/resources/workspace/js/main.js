@@ -72,7 +72,7 @@ Quiz.addQuestion(
     new ChoiceQuestion("What is 1+1?")
         .setChoices("3", "5", "9")
         .setRightAnswers("2")
-        .setMaxAttempts(1)
+        .setMaxAttempts(2)
 );
 
 Quiz.addQuestion(
@@ -82,6 +82,11 @@ Quiz.addQuestion(
         .setMaxAttempts(9)
 );
 
+// add local gui refs to quiz
+Quiz.addGui(
+    "answerContainer", 
+    $(questionScreen).children("ul")
+);
 
 /* ----------------- */
 /* Utility Functions */
@@ -113,17 +118,26 @@ function getNextQuestion() {
     
 }
 
+
+Quiz.onQuizFinish.connect(() => console.log("lets goooo"));
+Quiz.onQuestionCompleted.connect(()=>{console.log("question completed, i guess...")});
+Quiz.start();
+
+Quiz.getNextQuestion();
+Quiz.submitAnswer("asd");
+Quiz.submitAnswer("asd");
+console.log(Quiz.questionNumber);
+Quiz.getNextQuestion();
+Quiz.submitAnswer("asd");
+Quiz.submitAnswer("asd");
+Quiz.submitAnswer("asd");
+Quiz.submitAnswer("4");
+console.log(Quiz.questionNumber);
+
+
+
 function startQuiz() {
     switchScreen(questionScreen);
-    Quiz.addGui("answerContainer", $(questionScreen).children("ul"));
-
-    Quiz.addListener("click", "answerContainer", function() {console.log("answers clicked!")});
-
-    Quiz.setQuizTimed(false)
-    Quiz.setDuration(10);
-    Quiz.start();
-
-    
     
 
 }

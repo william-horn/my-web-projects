@@ -133,8 +133,7 @@ export class QuizBuilder extends DynamicState {
         this.listener = new EventHandler(); // BETA
 
         // primitives
-        this.questionIndex = 0;
-        this.questionNumber = 1;
+        this.questionNumber = 0;
         this.duration = 0;
         this.timeLeft = 0;
         this.score = 0;
@@ -197,14 +196,15 @@ export class QuizBuilder extends DynamicState {
         if (!this.isState("active")) return;
 
         const prevQuestion = this.currentQuestion;
-        const currentQuestion = this.questions[this.questionIndex];
+        const currentQuestion = this.questions[this.questionNumber];
 
+        // trigger question completed if we get the next question but the last one was unanswered
         if (prevQuestion && prevQuestion.isState("unanswered")) {
             this.onQuestionCompleted.fire(prevQuestion);
         }
 
         // if no next question, reset the quiz
-        if (this.questionIndex >= this.questions.length) {
+        if (this.questionNumber >= this.questions.length) {
             this.setState("complete");
             this.finish();
             return;
@@ -212,8 +212,7 @@ export class QuizBuilder extends DynamicState {
 
         // update new question
         this.currentQuestion = currentQuestion;
-        this.questionIndex++;
-        this.questionNumber = Math.min(this.questions.length, this.questionNumber + 1);
+        this.questionNumber++;
 
         return currentQuestion;
     }
@@ -253,6 +252,7 @@ export class QuizBuilder extends DynamicState {
 
         // if this was the last question, reset the quiz with a state of "complete"
         if (this.questionNumber >= quizLength) {
+            console.log("completed from submission!");
             this.setState("complete");
             this.finish();
         }
@@ -382,7 +382,7 @@ export class QuizBuilder extends DynamicState {
     }
 
     finish() {
-        if (!this.isState("active")) return;
+        if (this.isState("inactive")) return;
         // fire onQuizFinish event 
         this.onQuizFinish.fire(this.state);
         this.setState("inactive");
@@ -392,8 +392,7 @@ export class QuizBuilder extends DynamicState {
         this.timerRoutine = null; // this line is no longer necessary but will keep in case future use is needed
 
         // reset quiz properties
-        this.questionIndex = 0;
-        this.questionNumber = 1;
+        this.questionNumber = 0;
         this.correctAnswers = 0;
         this.score = 0;
         this.currentQuestion = undefined;

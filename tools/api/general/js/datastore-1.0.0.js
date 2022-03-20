@@ -76,7 +76,7 @@ datastore.get = function(datakey, def) {
 }
 
 datastore.update = function(datakey, callback) {
-    const savedData = this.get(datakey);
+    let savedData = this.get(datakey);
 
     if (savedData === undefined) {
         savedData = this.cache[datakey];
