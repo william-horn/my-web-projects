@@ -88,6 +88,11 @@ Quiz.addGui(
     $(questionScreen).children("ul")
 );
 
+Quiz.addGui(
+    "startQuizButton",
+    $(".intro-screen button")
+);
+
 /* ----------------- */
 /* Utility Functions */
 /* ----------------- */
@@ -118,31 +123,13 @@ function getNextQuestion() {
     
 }
 
-
-Quiz.onQuizFinish.connect(() => console.log("lets goooo"));
-Quiz.onQuestionCompleted.connect(()=>{console.log("question completed, i guess...")});
-Quiz.start();
-
-Quiz.getNextQuestion();
-Quiz.submitAnswer("asd");
-Quiz.submitAnswer("asd");
-console.log(Quiz.questionNumber);
-Quiz.getNextQuestion();
-Quiz.submitAnswer("asd");
-Quiz.submitAnswer("asd");
-Quiz.submitAnswer("asd");
-Quiz.submitAnswer("4");
-console.log(Quiz.questionNumber);
-
-
+Quiz.addListener("click", "answerContainer", () => console.log("begin! 1"))
+Quiz.addListener("click", "answerContainer", () => console.log("begin! 2"))
 
 function startQuiz() {
     switchScreen(questionScreen);
-    
 
 }
 
 
-
-
-$(".intro-screen button").click(() => startQuiz());
+Quiz.addListener("click", "startQuizButton", () => startQuiz())

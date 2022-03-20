@@ -61,7 +61,7 @@ getGui([string] gui name)
 getScreenFromName([string] gui name) -- private
 getCorrectAnswers()
 getIncorrectAnswers()
-getQuestionNumber)
+getQuestionNumber()
 getFormattedScore()
 getTimeLeft()
 addListener([string] event name, [string] gui name, [function] callback function)
@@ -252,7 +252,6 @@ export class QuizBuilder extends DynamicState {
 
         // if this was the last question, reset the quiz with a state of "complete"
         if (this.questionNumber >= quizLength) {
-            console.log("completed from submission!");
             this.setState("complete");
             this.finish();
         }
@@ -328,7 +327,7 @@ export class QuizBuilder extends DynamicState {
     addListener(eventName, guiName, func) {
         const gui = this.guis[guiName];
         handleErr(!gui, "Cannot add listener to GUI '" + guiName + "' (does not exist)");
-        this.listener.add(eventName, gui, func);
+        return this.listener.add(eventName, gui, func);
     }
 
     // BETA
@@ -347,8 +346,7 @@ export class QuizBuilder extends DynamicState {
 
     // BETA
     removeListener(eventName, guiName) {
-        const gui = this.guis[guiName];
-        handleErr(!gui, "Cannot remove listener, GUI name does not exist");
+        const gui = this.guis[guiName] || guiName;
         this.listener.remove(eventName, gui);
     }
 

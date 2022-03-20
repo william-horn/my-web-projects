@@ -57,7 +57,7 @@ const eventHandlerStates = {
 
 // bypass jQuery wrapper
 function getRawObject(object) {
-    return isJQ? object.get(0) : object;
+    return isJQ? object.get(0): object;
 }
 
 class Listener extends DynamicState {
@@ -185,7 +185,7 @@ export default class EventHandler extends Listener {
     
         const that = this; // EventHandler object
         function funcHandler(jsEvent) {
-            console.log("global: ", that.state, " local: ", localListener.state);
+            // console.log("global: ", that.state, " local: ", localListener.state);
             if (that.isState("listening") && localListener.isState("listening")) {
                 func(jsEvent);
             }
