@@ -43,6 +43,24 @@ Coming soon
 /* ---------------- */
 /* Import Libraries */
 /* ---------------- */
+import datastore from "../../../../../tools/api/general/js/datastore-1.0.0.js";
+import PseudoEvent from "../../../../../tools/api/general/js/pseudo-events-2.1.0.js";
+
+const event = new PseudoEvent();
+
+const f_0 = arg => console.log("event 0 fired with args: ", arg);
+const f_1 = arg => console.log("event 1 fired with args: ", arg);
+const f_2 = arg => console.log("event 2 fired with args: ", arg);
+
+const conn = event.connect(f_0);
+event.connect(f_1);
+// event.strongConnect("henry", f_1);
+
+event.disconnect(f_1);
+
+event.fire("TEST");
+
+console.log(event);
 
 /* ------------------------- */
 /* Global Element References */

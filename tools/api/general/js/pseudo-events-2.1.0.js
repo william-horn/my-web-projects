@@ -94,7 +94,12 @@ function resumer(key) {
 // read-only object
 // contains connection information
 class Connection extends DynamicState {
-    constructor(connectionType, name, func=name) { // connectionType="type", name*="name", func=func
+    constructor(connectionType, name, func) { // connectionType="type", name*="name", func=func
+        [name, func] = [
+            func ? name : undefined,
+            func ? func : name
+        ]
+
         super(eventStates);
         this.setState("listening");
 
@@ -164,12 +169,9 @@ export default class PseudoEvent extends DynamicState {
     }
 
     applyFilter(connectionName, connectionFunc, override, action) {
-        const typeof_connectionName = typeof connectionName;
-        const typeof_connectionFunc = typeof connectionFunc;
-
-        const isFunc_connectionFunc = typeof_connectionFunc === "function";
-        const isObj_connectionName = typeof_connectionName === "object";
-        const isStr_connectionName = typeof_connectionName === "string";
+        // data types BEFORE conversion
+        let isFunc_connectionFunc = typeof connectionFunc === "function";
+        let isFunc_connectionName = typeof connectionName === "function";
 
         const connections = this.connections;
 
@@ -177,16 +179,21 @@ export default class PseudoEvent extends DynamicState {
         // todo: there's probably a better, more generalized way to do this. think of it later.
         // @note maybe use arrays to sort by type?
         [connectionName, connectionFunc, override] = [
-            isFunc_connectionFunc
-            ? undefined : connectionName,
+            isFunc_connectionName
+                ? undefined : connectionName,
 
-            isFunc_connectionFunc
-            ? connectionName : isFunc_connectionFunc
-            ? connectionFunc : undefined,
+            isFunc_connectionName
+                ? connectionName : isFunc_connectionFunc
+                ? connectionFunc : undefined,
 
             connectionFunc === true 
                 ? connectionFunc : override
         ];
+
+        // data types AFTER conversion
+        const typeof_connectionName = typeof connectionName;
+        const isObj_connectionName = typeof_connectionName === "object";
+        const isStr_connectionName = typeof_connectionName === "string";
 
         // the above logic will produce:
         //
@@ -211,12 +218,11 @@ export default class PseudoEvent extends DynamicState {
         // * connectionName can be a string OR an object
         gutil.generalIteration(
             connections,
-            val => {
-                return val.isMutable(override)
+            val => val.isMutable(override)
                     && (isStr_connectionName ? val.name === connectionName : true)
                     && (connectionFunc ? val.source === connectionFunc : true)
-                    && (isObj_connectionName ? (connectionName === val) : true)
-            },
+                    && (isObj_connectionName ? (connectionName === val) : true),
+
             result => result, 
             key => action.call(this, key)
         );
@@ -231,7 +237,7 @@ export default class PseudoEvent extends DynamicState {
         this.applyFilter(name, func, override, pauser);
     }
 
-    resume(name, func) {
+    resume(name, func, override) {
         this.applyFilter(name, func, override, resumer);
     }
 

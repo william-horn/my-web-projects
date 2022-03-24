@@ -96,7 +96,7 @@ datastore.remove = function(datakey) {
     localStorage.removeItem(datakey);
 }
 
-datastore.clear = function(datakey) {
+datastore.clearAll = function(datakey) {
     localStorage.clear();
 }
 
