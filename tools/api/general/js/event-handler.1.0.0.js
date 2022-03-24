@@ -7,8 +7,8 @@
 ? @author:                 William J. Horn
 ? @document-name:          event-handler.js
 ? @document-created:       03/16/2022
-? @document-modified:      03/16/2022
-? @document-version:       v1.0.0
+? @document-modified:      03/22/2022
+? @document-version:       v1.1.0
 
 ==================================================================================================================================
 
@@ -35,69 +35,32 @@ Coming soon
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   Add support for jQuery --DONE
--   Add pause/resume functionality to events --DONE
--   Generalize the retrieval of data from a map/array (maybe as a new utility for gutil?) with a callback
--   Debating use of classes for main EventHandler module
+!-  Currently re-writing entire library. NOT ready for functional use.
 
 ==================================================================================================================================
 */
 
-import DynamicState from "./dystates-1.0.0.js";
+import PseudoEvent from "./pseudo-events-2.1.0.js";
+import DynamicState from "./dynamicstate-1.0.0.js";
 
 // jQuery support for events
-const isJQ = window.jQuery;
-const eventConnectorName = isJQ ? "on" : "addEventListener";
-const eventDisconnectorName = isJQ ? "off" : "removeEventListener";
+const eventConnectorName = window.jQuery ? "on" : "addEventListener";
+const eventDisconnectorName = window.jQuery ? "off" : "removeEventListener";
 
-const eventHandlerStates = {
-    "listening": "listening",
-    "paused": "paused"
-}
-
-// Listener - object
-// EventHandler - object
-
-/* api:
-EventHandler.add("click", "name", object, function)
-EventHandler.add("click", object, function)
-
-EventHandler.remove/pause/resume("click")
-EventHandler.remove/pause/resume("click", "name")
-EventHandler.remove/pause/resume("click", object)
-EventHandler.remove/pause/resume("click", "name", object)
-EventHandler.remove/pause/resume(ListenerObject)
-*/
-
-class Listener extends DynamicState {
+export default class EventHandler {
     constructor() {
-        super(eventHandlerStates);
-        this.setState("listening");
-
-        this.alias = ""; // arbitrary, optional event name alias
-        this.objRef = ""; // actual reference to the object
-        this.callback = ""; // callback function given by the developer
-        this.handler = "" // handler function that wraps the callback function
-    }  
-}
-
-class EventHandler extends Listener {
-    constructor() {
-        super();
+        this.className = "EventHandler";
 
         /* 
-            this.connections [ListenerObject] = {
-                "eventName" [ListenerObject]: [
-                    ListenerObject,
-                    ListenerObject,
-                    ListenerObject,
-                ]
-            }
+            this.childEvents = [
+                ListenerObject,
+                ListenerObject,
+                ListenerObject,
+            ]
+            this.connections = [
+            ]
+            this.parentEvent = none;
         */
-        this.connections = {}; 
     }
 
-    add(
 }
-
-

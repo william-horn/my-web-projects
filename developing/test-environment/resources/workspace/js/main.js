@@ -43,9 +43,18 @@ Coming soon
 /* ---------------- */
 /* Import Libraries */
 /* ---------------- */
-import jsinit from "../../../../../tools/api/general/js/js-init-1.0.0.js";
+import gutil from "../../../../../tools/api/general/js/gutil-1.0.0.js";
 import datastore from "../../../../../tools/api/general/js/datastore-1.0.0.js";
+import PseudoEvent from "../../../../../tools/api/general/js/pseudo-events-2.1.0.js";
+import DynamicState from "../../../../../tools/api/general/js/dynamicstate-1.0.0.js";
 import EventHandler from "../../../../../tools/api/general/js/event-handler.1.0.0.js";
+
+
+const event = new PseudoEvent();
+
+event.connect(() => console.log("fired"));
+
+event.fire();
 
 /* ------------------------- */
 /* Global Element References */
@@ -68,11 +77,7 @@ import EventHandler from "../../../../../tools/api/general/js/event-handler.1.0.
 /* Event Callback Functions */
 /* ------------------------ */
 
-function init() {
-    
-}
 
 /* -------------------------- */
 /* Connect Js Event Listeners */
 /* -------------------------- */
-jsinit(init);

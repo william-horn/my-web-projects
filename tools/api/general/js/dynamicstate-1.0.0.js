@@ -1,13 +1,13 @@
 /*
 ? @document-start
-======================
-| MAIN PROGRAM LOGIC |
+=====================
+| DYNAMIC STATE API |
 ==================================================================================================================================
 
 ? @author:                 William J. Horn
-? @document-name:          main.js
-? @document-created:       
-? @document-modified:      
+? @document-name:          dynamicstate.js
+? @document-created:       03/15/2022
+? @document-modified:      03/15/2022
 ? @document-version:       v1.0.0
 
 ==================================================================================================================================
@@ -17,13 +17,11 @@
 | ABOUT DOCUMENT |
 ==================================================================================================================================
 
-Coming soon
-
 ==================================================================================================================================
 
-? @document-changelog
-======================
-| DOCUMENT CHANGELOG |
+? @document-api
+=============
+| ABOUT API |
 ==================================================================================================================================
 
 Coming soon
@@ -35,36 +33,34 @@ Coming soon
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   
+-   Find a way to re-implement 'onStateChanged' without causing stack loop with pseudo-events --NOT DONE
 
 ==================================================================================================================================
 */
 
-/* ---------------- */
-/* Import Libraries */
-/* ---------------- */
 
-/* ------------------------- */
-/* Global Element References */
-/* ------------------------- */
+export default class DynamicState {
+    constructor(states) {
+        this.className = "DynamicState";
+        this.states = states;
+        this.state = "initial"; // default state
+    }
 
-/* ----------------------- */
-/* Internal Program States */
-/* ----------------------- */
+    getState() {
+        return this.state;
+    }
 
-/* ---------------------- */
-/* General Util Functions */
-/* ---------------------- */
+    setState(state) {
+        if (!this.states[state]) {
+            console.error("DynamicState Class: '" + state + "' is not a valid state");
+            return;
+        }
 
-/* ------------------------ */
-/* Dedicated Util Functions */
-/* ------------------------ */
+        const oldState = this.state;
+        this.state = this.states[state];
+    }
 
-/* ------------------------ */
-/* Event Callback Functions */
-/* ------------------------ */
-
-
-/* -------------------------- */
-/* Connect Js Event Listeners */
-/* -------------------------- */
+    isState(state) {
+        return this.state === state;
+    }
+}

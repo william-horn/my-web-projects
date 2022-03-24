@@ -7,7 +7,7 @@
 ? @author:                 William J. Horn
 ? @document-name:          gutil.js
 ? @document-created:       03/04/2022
-? @document-modified:      03/11/2022
+? @document-modified:      03/22/2022
 ? @document-version:       v1.0.0
 
 ==================================================================================================================================
@@ -45,7 +45,7 @@ Coming soon
 ==================================================================================================================================
 */
 
-const gutil = {}
+const gutil = {};
 
 // wrap for-loop logic in a 'setInterval' to achieve delay between loop cycles
 function forInterval(start, stop, step, delay, callback) {
@@ -94,6 +94,81 @@ function getRandomIndex(array) {
     return array[randomInt(array.length - 1)];
 }
 
+// general iteration using callbacks for conditionals
+// @note this is probably really slow for big data structures
+// todo: look into iterator functions to try and generalize this iteration for arrays and objects
+function generalIteration(something, process, condition, action) {
+    for (let key in something) {
+        const val = something[key];
+        const result = process(val); // callback to process value
+        if (condition(result)) action(key); // condition processed result, then do action
+    }
+}
+
+// inherits generalIteration
+function getAllOf(object, process) {
+    const all = [];
+    generalIteration(
+        object, process, 
+        result => result, // condition
+        key => all.push(object[key]) // action
+    );
+    return all;
+}
+
+// inherits generalIteration
+function arrayRemoveAllOf(array, process) {
+    generalIteration(
+        array, process, 
+        result => result, 
+        key => array.splice(key, 1)
+    );
+}
+
+// inherits generalIteration
+function objectRemoveAllOf(object, process) {
+    generalIteration(
+        object, process, 
+        result => result, 
+        key => delete object[key]
+    );
+}
+
+// api
+// treeSearch( {{{ ... }}}, depth=5, () => {} )
+// treeSearch( {{{ ... }}}, () => {} )
+// recursive tree search 
+// @note probably super slow, remember to benchmark later
+function treeSearch(object, maxDepth, process) {
+    process = process || maxDepth;
+    maxDepth = typeof maxDepth === "function" ? null : maxDepth;
+
+    let depth = 0;
+    const results = [];
+
+    function open(deepObject) {
+        depth++;
+        for (let key in deepObject) {
+            const val = deepObject[key];
+            switch(typeof val) {
+                case "object":
+                    if (maxDepth ? depth <= maxDepth : true) {
+                        open(val);
+                        break;
+                    }
+
+                default:
+                    const result = process(val);
+                    if (!result === undefined) results.push(val);
+            }
+        }
+        depth--;
+    }
+
+    open(object);
+    return results
+}
+
 // module utility
 gutil.getRandomIndex = getRandomIndex;
 gutil.randomInt = randomInt;
@@ -101,5 +176,10 @@ gutil.randomizeArray = randomizeArray;
 gutil.shallowCopyArray = shallowCopyArray;
 gutil.forInterval = forInterval;
 gutil.getClockHour = getClockHour;
+gutil.treeSearch = treeSearch;
+gutil.generalIteration = generalIteration;
+gutil.arrayRemoveAllOf = arrayRemoveAllOf;
+gutil.objectRemoveAllOf = objectRemoveAllOf;
+gutil.getAllOf = getAllOf;
 
 export default gutil;

@@ -48,7 +48,7 @@ datastore.get("invalidName", null) // pass second argument as null if you want t
 
 const datastore = {
     datakeys: {}, // localStorage item keys
-    cache: {}
+    cache: {} // get cache
 }
 
 function handleErr(condition, ...args) {
@@ -83,7 +83,9 @@ datastore.update = function(datakey, callback) {
         if (handleErr(!savedData, "Attempt to update non-existent data.")) return;
     }
 
-    this.save(datakey, callback(savedData));
+    savedData = callback(savedData);
+    if (handleErr(!savedData, "No data was returned in update callback; canceling set request")) return;
+    this.save(datakey, savedData);
 }
 
 datastore.save = function(datakey, value) {
