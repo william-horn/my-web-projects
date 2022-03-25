@@ -50,3 +50,6 @@
     background-color: white;
 }
 
+.wireframe * {
+    border: 1px solid red !important;
+}

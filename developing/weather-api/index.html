@@ -17,8 +17,6 @@
 | ABOUT DOCUMENT |
 ==================================================================================================================================
 
-Coming soon
-
 ==================================================================================================================================
 
 ? @document-changelog
@@ -26,16 +24,12 @@ Coming soon
 | DOCUMENT CHANGELOG |
 ==================================================================================================================================
 
-Coming soon
-
 ==================================================================================================================================
 
 ? @document-todo
 =================
 | DOCUMENT TODO |
 ==================================================================================================================================
-
--   
 
 ==================================================================================================================================
  -->
@@ -46,33 +40,62 @@ Coming soon
 <html>
     <head>
         <!-- ** Title ** -->
-        <title>Webpage</title>
+        <title>Weather Dashboard</title>
 
         <!-- ** Metadata ** -->
         <meta charset="utf-8"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta http-equiv="X-UA-Compatible" content="ie=edge"/>
         <meta name="author" content="William J. Horn"/>
-        <meta name="description" content="My webpage"/>
+        <meta name="description" content="My weather dashboard for weather forecast"/>
 
         <!-- ** CSS Third Party ** -->
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"/>
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;700&display=swap" rel="stylesheet"/> <!-- font-family: 'Source Code Pro', monospace; -->
-        <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Source+Code+Pro:wght@200;300;400&display=swap" rel="stylesheet"/> <!-- font-family: 'Press Start 2P', cursive; -->
+        <!-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500&family=Press+Start+2P&family=Source+Code+Pro:wght@200;300;400&display=swap" rel="stylesheet"> -->
 
         <!-- ** Local CSS ** -->
         <!-- css libraries -->
-        <link rel="stylesheet" href="./resources/workspace/css/libs/base.css"/> <!-- base css library -->
-        <link rel="stylesheet" href=""/> <!-- other general css libraries -->
+        <link rel="stylesheet" href="../../tools/api/general/css/base.css"/> <!-- base css library -->
+        <link rel="stylesheet" href="../../tools/api/general/css/positioning.css"> <!-- positioning library -->
+        <link rel="stylesheet" href="../../tools/api/general/css/visibility.css"/> <!-- visibility utility library -->
 
         <!-- main styles -->
         <link rel="stylesheet" href="./resources/workspace/css/main-style.css"/>
 	</head>
 	
 	<body>
-        <div class="container">
-            <p>Hello, world!</p>
+        <div class="fill-viewport">
+
+            <header class="dashboard-header">
+                <h1>Weather Dashboard</h1>
+            </header>
+
+            <div class="container">
+            </div>
+
         </div>
+
+        <div class="fill-viewport">
+
+            <header class="dashboard-header">
+                <h1>Weather Dashboard</h1>
+            </header>
+
+            <div class="container">
+            </div>
+
+        </div>
+
+        <!-- ** JS Third Party ** -->
+        <!-- import jQuery -->
+        <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+        
 		<!-- load main script -->
 		<script type="module" src="./resources/workspace/js/main.js"></script>
 	</body>
 </html>
+
+
+
+

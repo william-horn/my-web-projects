@@ -17,7 +17,7 @@
 | ABOUT DOCUMENT |
 ==================================================================================================================================
 
-Coming soon
+Handle Weather Dashboard logic
 
 ==================================================================================================================================
 
@@ -26,16 +26,12 @@ Coming soon
 | DOCUMENT CHANGELOG |
 ==================================================================================================================================
 
-Coming soon
-
 ==================================================================================================================================
 
 ? @document-todo
 =================
 | DOCUMENT TODO |
 ==================================================================================================================================
-
--   
 
 ==================================================================================================================================
 */
@@ -46,21 +42,20 @@ Coming soon
 import datastore from "../../../../../tools/api/general/js/datastore-1.0.0.js";
 import PseudoEvent from "../../../../../tools/api/general/js/pseudo-events-2.1.0.js";
 
-const event = new PseudoEvent();
+// working link: https://api.openweathermap.org/data/2.5/weather?q=Raleigh&APPID=19eecb01033710945577be8f1d9f7976
+// my api key: 594655f7cc53f85edac45ab1fd9d4a8a
 
-const f_0 = arg => console.log("event 0 fired with args: ", arg);
-const f_1 = arg => console.log("event 1 fired with args: ", arg);
-const f_2 = arg => console.log("event 2 fired with args: ", arg);
+async function getRequest(url) {
+    const response = await fetch(url);
+    const data = await response.json();
+    return data;
+}
 
-const conn = event.connect(f_0);
-event.connect(f_1);
-// event.strongConnect("henry", f_1);
+const data = getRequest("https://api.openweathermap.org/data/2.5/weather?q=Raleigh,NC,US&appid=594655f7cc53f85edac45ab1fd9d4a8a");
+data.then(data => {
+    console.log("finally: ", data);
+})
 
-event.disconnect(f_1);
-
-event.fire("TEST");
-
-console.log(event);
 
 /* ------------------------- */
 /* Global Element References */

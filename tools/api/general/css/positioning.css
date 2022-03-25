@@ -1,3 +1,44 @@
+/*
+? @document-start
+===================
+| CSS POSITIONING |
+==================================================================================================================================
+
+? @author:                 William J. Horn
+? @document-name:          positioning.css
+? @document-created:       03/24/2022
+? @document-modified:      03/24/2022
+? @document-version:       v1.0.0
+
+==================================================================================================================================
+
+? @document-info
+==================
+| ABOUT DOCUMENT |
+==================================================================================================================================
+
+CSS file with classes designed for positioning, sizing, and responsiveness
+
+==================================================================================================================================
+
+? @document-changelog
+======================
+| DOCUMENT CHANGELOG |
+==================================================================================================================================
+
+==================================================================================================================================
+
+? @document-todo
+=================
+| DOCUMENT TODO |
+==================================================================================================================================
+
+==================================================================================================================================
+*/
+
+/* ---------------- */
+/* Global Variables */
+/* ---------------- */
 
 :root {
     --smallPadding: 5px;
@@ -8,6 +49,10 @@
     --mediumMargin: 15px;
     --largeMargin: 30px;
 }
+
+/* --------------- */
+/* Resize Children */
+/* --------------- */
 
 /* resize element to the user's entire screen dimensions */
 .fill-viewport {
@@ -21,17 +66,15 @@
     height: 100%;
 }
 
+/* --------------- */
+/* Center Children */
+/* --------------- */
+
 /* center children of this element vertically */
 .cent-all-vt {
     display: flex;
     flex-direction: column;
     justify-content: center;
-}
-
-/* center the element itself horizontally */
-.cent-self-hz {
-    display: block;
-    margin: 0 auto;
 }
 
 /* center children of this element horizontally */
@@ -40,6 +83,20 @@
     flex-direction: column;
     align-items: center;
 }
+
+/* ----------- */
+/* Center Self */
+/* ----------- */
+
+/* center the element itself horizontally */
+.cent-self-hz {
+    display: block;
+    margin: 0 auto;
+}
+
+/* ----- */
+/* Other */
+/* ----- */
 
 /* fit all content in parent within vertical viewport */
 .start-top {
@@ -66,7 +123,7 @@
     height: 50%;
 }
 
-.half-all {
+.half {
     width: 50%;
     height: 50%;
 }

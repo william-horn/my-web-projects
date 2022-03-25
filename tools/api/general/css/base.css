@@ -85,6 +85,10 @@ Coming soon
     /* font-family: monospace; */
 }
 
+html {
+    overflow: hidden;
+}
+
 p, a, li {
     font-size: var(--baseFontSize);
 }
@@ -112,13 +116,14 @@ h1, h2, h3,
 h4, h5, h6 {
     text-align: center;
     color: var(--baseHeadingTextColor);
-    margin-bottom: 10px;
+    padding-bottom: 10px;
     font-size: calc(var(--baseFontSize) + 0.4rem);
 }
 
 h1 {
     font-size: calc(var(--baseFontSize) + 1.6rem);
-    margin-bottom: 15px;
+    padding-bottom: 15px;
+    padding-top: 15px;
 }
 
 button {
