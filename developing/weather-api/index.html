@@ -50,7 +50,7 @@
         <meta name="description" content="My weather dashboard for weather forecast"/>
 
         <!-- ** CSS Third Party ** -->
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"/>
+        <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.3/css/bulma.min.css"/> -->
         <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@200;300;700&display=swap" rel="stylesheet"/> <!-- font-family: 'Source Code Pro', monospace; -->
         <!-- <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500&family=Press+Start+2P&family=Source+Code+Pro:wght@200;300;400&display=swap" rel="stylesheet"> -->
 
@@ -64,33 +64,146 @@
         <link rel="stylesheet" href="./resources/workspace/css/main-style.css"/>
 	</head>
 	
-	<body>
-        <div class="fill-viewport">
+	<body class="">
+        <div class="wrapper">
 
-            <header class="dashboard-header">
+            <header class="dashboard-header main-bg second-bg">
                 <h1>Weather Dashboard</h1>
             </header>
 
-            <div class="container">
-            </div>
+            <main>
+                <div class="top-container fill-viewport">
+                    <div class="search-container">
+                        <!-- <h2>Enter a Location:</h2> -->
+                        <!-- <p>do something</p> -->
+                        <div class="search-bg cent-self-hz">
+                            <input id="search-field" type="text" placeholder="City, State">
+                            <div class="search-drop-down search-history-results">
+                                <!-- GENERATE THESE -->
+                                <button>Raleigh, NC</button>
+                                <button>Moscow, BR</button>
+                                <button>London, EN</button>
+                                <button>Hillsborough, NC</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="current-weather-container cent-all-hz">
+                        <div class="current-weather-display break-all">
+
+                            <div class="cent-all-hz md-m-all-vt lg-m-bot">
+                                <h2>Raleigh, NC</h2>
+                                <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
+                            </div>
+
+                            <div class="weather-data">
+                                <div class="flex-1 second-bg">
+                                    <p>Temperature:</p>
+                                    <p>40°F</p>
+                                </div>
+                                <div class="flex-1 main-bg">
+                                    <p>Wind Speed:</p>
+                                    <p>13mph</p>
+                                </div>
+                                <div class="flex-1 second-bg">
+                                    <p>Humidity:</p>
+                                    <p>3%</p>
+                                </div>
+                                <div class="flex-1 main-bg">
+                                    <p>UVI:</p>
+                                    <p>3%</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="forecast-container second-bg md-p">
+                        <h2>5-Day Forecast</h2>
+                        <div class="weather-card-container width-75 md-m-all-vt cent-self-hz">
+
+
+                            <div class="weather-card md-p-all main-bg">
+                                <div class="cent-all-hz">
+                                    <h3>Raleigh, NC</h3>
+                                    <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
+                                </div>
+                                <!-- GENERATE THESE -->
+                                <div class="weather-data">
+                                    <div class="flex-1 main-bg">
+                                        <p>Temperature:</p>
+                                        <p>40°F</p>
+                                    </div>
+                                    <div class="flex-1 second-bg">
+                                        <p>Wind Speed:</p>
+                                        <p>13mph</p>
+                                    </div>
+                                    <div class="flex-1 main-bg">
+                                        <p>Humidity:</p>
+                                        <p>3%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="weather-card md-p-all main-bg">
+                                <div class="cent-all-hz">
+                                    <h3>Raleigh, NC</h3>
+                                    <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
+                                </div>
+                                <!-- GENERATE THESE -->
+                                <div class="weather-data">
+                                    <div class="flex-1 main-bg">
+                                        <p>Temperature:</p>
+                                        <p>40°F</p>
+                                    </div>
+                                    <div class="flex-1 second-bg">
+                                        <p>Wind Speed:</p>
+                                        <p>13mph</p>
+                                    </div>
+                                    <div class="flex-1 main-bg">
+                                        <p>Humidity:</p>
+                                        <p>3%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="weather-card md-p-all main-bg">
+                                <div class="cent-all-hz">
+                                    <h3>Raleigh, NC</h3>
+                                    <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
+                                </div>
+                                <!-- GENERATE THESE -->
+                                <div class="weather-data">
+                                    <div class="flex-1 main-bg">
+                                        <p>Temperature:</p>
+                                        <p>40°F</p>
+                                    </div>
+                                    <div class="flex-1 second-bg">
+                                        <p>Wind Speed:</p>
+                                        <p>13mph</p>
+                                    </div>
+                                    <div class="flex-1 main-bg">
+                                        <p>Humidity:</p>
+                                        <p>3%</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+
+
+                </div>
+            </main>
 
         </div>
 
-        <div class="fill-viewport">
 
-            <header class="dashboard-header">
-                <h1>Weather Dashboard</h1>
-            </header>
-
-            <div class="container">
-            </div>
-
-        </div>
 
         <!-- ** JS Third Party ** -->
         <!-- import jQuery -->
         <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-        
+
 		<!-- load main script -->
 		<script type="module" src="./resources/workspace/js/main.js"></script>
 	</body>

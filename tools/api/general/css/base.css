@@ -147,5 +147,9 @@ input {
     outline: none;
     padding: 5px;
     font-size: var(--baseFontSize);
+    width: 100%;
 }
 
+::placeholder {
+    color: #dcdcdc;
+}

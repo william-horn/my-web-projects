@@ -115,8 +115,66 @@ CSS file with classes designed for positioning, sizing, and responsiveness
     justify-content: space-between;
 }
 
-.half-width {
+.space-around {
+    display: flex;
+    justify-content: space-around;
+}
+
+.space-even {
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.space-wrap {
+    flex-wrap: wrap;
+}
+
+.content-grid {
+    align-content: flex-start;
+}
+
+.align-start {
+    align-items: flex-start;
+}
+
+.align-center {
+    align-items: center;
+}
+
+/* ----------- */
+/* Resize Self */
+/* ----------- */
+
+.flex-1 {
+    display: flex;
+}
+
+.flex-1 > * {
+    flex: 1;
+}
+
+.break-all p {
+    word-break: break-all;
+}
+
+.width-25 {
+    width: 25%;
+}
+
+.width-50 {
     width: 50%;
+}
+
+.width-75 {
+    width: 75%;
+}
+
+.width-100 {
+    width: 100%;
+}
+
+.full-height {
+    height: 100%;
 }
 
 .half-height {
@@ -142,6 +200,60 @@ CSS file with classes designed for positioning, sizing, and responsiveness
 
 .lg-p {
     padding: var(--largePadding);
+}
+
+.sm-m-hz {
+    margin-left: var(--smallMargin);
+    margin-right: var(--smallMargin);
+}
+
+.md-m-hz {
+    margin-left: var(--mediumMargin);
+    margin-right: var(--mediumMargin);
+}
+
+.lg-m-hz {
+    margin-left: var(--largeMargin);
+    margin-right: var(--largeMargin);
+}
+
+.sm-m-vt {
+    margin-top: var(--smallMargin);
+    margin-bottom: var(--smallMargin);
+}
+
+.md-m-vt {
+    margin-top: var(--mediumMargin);
+    margin-bottom: var(--mediumMargin);
+}
+
+.lg-m-vt {
+    margin-top: var(--largeMargin);
+    margin-bottom: var(--largeMargin);
+}
+
+.sm-m-bot {
+    margin-bottom: var(--smallMargin);
+}
+
+.md-m-bot {
+    margin-bottom: var(--mediumMargin);
+}
+
+.lg-m-bot {
+    margin-bottom: var(--largeMargin);
+}
+
+.sm-m-top {
+    margin-top: var(--smallMargin);
+}
+
+.md-m-top {
+    margin-top: var(--mediumMargin);
+}
+
+.lg-m-top {
+    margin-top: var(--largeMargin);
 }
 
 .sm-m-all-vt > *:not(:last-child) {
