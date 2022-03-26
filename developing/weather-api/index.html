@@ -7,7 +7,7 @@
 ? @author:                 William J. Horn
 ? @document-name:          index.html
 ? @document-created:       03/24/2022
-? @document-modified:      03/24/2022
+? @document-modified:      03/26/2022
 ? @document-version:       v1.0.0
 
 ==================================================================================================================================
@@ -17,6 +17,15 @@
 | ABOUT DOCUMENT |
 ==================================================================================================================================
 
+Welcome to My Weather Dashboard!
+
+This is the landing page for My Weather Dashboard. This project is on-going and does not have many features yet, but
+if you'd like to make a recommendation or if you've encountered any bugs, feel free to contact me at:
+
+    williamjosephhorn@gmail.com
+
+This project was built from scratch with the exception of jQuery, Google Fonts API, and of course, the openweathermap API.
+
 ==================================================================================================================================
 
 ? @document-changelog
@@ -24,12 +33,16 @@
 | DOCUMENT CHANGELOG |
 ==================================================================================================================================
 
+None
+
 ==================================================================================================================================
 
 ? @document-todo
 =================
 | DOCUMENT TODO |
 ==================================================================================================================================
+
+-   Restructure in the future to utilize classes in a more efficient way --NOT DONE
 
 ==================================================================================================================================
  -->
@@ -67,138 +80,108 @@
 	<body class="">
         <div class="wrapper">
 
-            <header class="dashboard-header main-bg second-bg">
-                <h1>Weather Dashboard</h1>
+            <!-- Page heading -->
+            <header class="dashboard-header big-header second-bg">
+                <h1 class="big-heading">Weather Dashboard</h1>
             </header>
 
+            <!-- Main page body -->
             <main>
-                <div class="top-container fill-viewport">
+                <div class="top-container">
                     <div class="search-container">
                         <!-- <h2>Enter a Location:</h2> -->
                         <!-- <p>do something</p> -->
                         <div class="search-bg cent-self-hz">
+                            <img class="search-icon" src="./resources/assets/imgs/mag.png" alt="">
                             <input id="search-field" type="text" placeholder="City, State">
-                            <div class="search-drop-down search-history-results">
-                                <!-- GENERATE THESE -->
-                                <button>Raleigh, NC</button>
-                                <button>Moscow, BR</button>
-                                <button>London, EN</button>
-                                <button>Hillsborough, NC</button>
+                            <img class="menu-icon" src="./resources/assets/imgs/menu-icon-2.png" alt="">
+                            <div id="search-drop-down" class="search-drop-down search-history-results">
+                                <div class="scroll">
+                                    <!-- GENERATE THESE BUTTONS -->
+                                </div>
                             </div>
                         </div>
+
+
+                        <div class="current-weather-container cent-all-hz">
+                            <div id="current-weather-display" class="current-weather-display break-all">
+    
+                                <div class="weather-header cent-all-hz lg-m-bot">
+                                    <h2>Raleigh, NC</h2>
+                                    <p>03/25/2022</p>
+                                    <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
+                                </div>
+    
+                                <div class="weather-data">
+                                    <div>
+                                        <p>Temperature:</p>
+                                        <p id="current-temp">40°F</p>
+                                    </div>
+                                    <div>
+                                        <p>Wind Speed:</p>
+                                        <p id="current-wind">13mph</p>
+                                    </div>
+                                    <div>
+                                        <p>Humidity:</p>
+                                        <p id="current-humid">3%</p>
+                                    </div>
+                                    <div>
+                                        <p>UVI:</p>
+                                        <p id="current-uvi">3%</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+                </div>
 
-                    <div class="current-weather-container cent-all-hz">
-                        <div class="current-weather-display break-all">
 
-                            <div class="cent-all-hz md-m-all-vt lg-m-bot">
-                                <h2>Raleigh, NC</h2>
+                <div class="forecast-container">
+                    <header class="big-header second-bg">
+                        <h2 class="big-heading">5-Day Forecast</h2>
+                    </header>
+
+                    <div id="weather-card-container" class="container">
+                        <!-- GENERATE THESE -->
+
+                         <!-- <div class="weather-card">
+                            <div class="cent-all-hz">
+                                <h3>03/26/2022</h3>
                                 <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
                             </div>
-
                             <div class="weather-data">
-                                <div class="flex-1 second-bg">
+                                <div>
                                     <p>Temperature:</p>
-                                    <p>40°F</p>
+                                    <p>sum</p>
                                 </div>
-                                <div class="flex-1 main-bg">
-                                    <p>Wind Speed:</p>
-                                    <p>13mph</p>
+                                <div>
+                                    <p>Temperature:</p>
+                                    <p>sum</p>
                                 </div>
-                                <div class="flex-1 second-bg">
-                                    <p>Humidity:</p>
-                                    <p>3%</p>
-                                </div>
-                                <div class="flex-1 main-bg">
-                                    <p>UVI:</p>
-                                    <p>3%</p>
+                                <div>
+                                    <p>Temperature:</p>
+                                    <p>sum</p>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
+
                     </div>
-
-                    <div class="forecast-container second-bg md-p">
-                        <h2>5-Day Forecast</h2>
-                        <div class="weather-card-container width-75 md-m-all-vt cent-self-hz">
-
-
-                            <div class="weather-card md-p-all main-bg">
-                                <div class="cent-all-hz">
-                                    <h3>Raleigh, NC</h3>
-                                    <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
-                                </div>
-                                <!-- GENERATE THESE -->
-                                <div class="weather-data">
-                                    <div class="flex-1 main-bg">
-                                        <p>Temperature:</p>
-                                        <p>40°F</p>
-                                    </div>
-                                    <div class="flex-1 second-bg">
-                                        <p>Wind Speed:</p>
-                                        <p>13mph</p>
-                                    </div>
-                                    <div class="flex-1 main-bg">
-                                        <p>Humidity:</p>
-                                        <p>3%</p>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div class="weather-card md-p-all main-bg">
-                                <div class="cent-all-hz">
-                                    <h3>Raleigh, NC</h3>
-                                    <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
-                                </div>
-                                <!-- GENERATE THESE -->
-                                <div class="weather-data">
-                                    <div class="flex-1 main-bg">
-                                        <p>Temperature:</p>
-                                        <p>40°F</p>
-                                    </div>
-                                    <div class="flex-1 second-bg">
-                                        <p>Wind Speed:</p>
-                                        <p>13mph</p>
-                                    </div>
-                                    <div class="flex-1 main-bg">
-                                        <p>Humidity:</p>
-                                        <p>3%</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="weather-card md-p-all main-bg">
-                                <div class="cent-all-hz">
-                                    <h3>Raleigh, NC</h3>
-                                    <img class="weather-icon" src="http://openweathermap.org/img/wn/10d@2x.png" alt="ok">
-                                </div>
-                                <!-- GENERATE THESE -->
-                                <div class="weather-data">
-                                    <div class="flex-1 main-bg">
-                                        <p>Temperature:</p>
-                                        <p>40°F</p>
-                                    </div>
-                                    <div class="flex-1 second-bg">
-                                        <p>Wind Speed:</p>
-                                        <p>13mph</p>
-                                    </div>
-                                    <div class="flex-1 main-bg">
-                                        <p>Humidity:</p>
-                                        <p>3%</p>
-                                    </div>
-                                </div>
-                            </div>
-
-                        </div>
-                    </div>
-
-
                 </div>
             </main>
 
+            <footer>
+                <div class="big-header">
+                    <h2 class="big-heading">Contact Me</h2>
+                    <p>Any issues with the website? Contact me here:</p>
+                </div>
+
+                <div class="container break-all space-wrap">
+                    <p>Phone Number: 919-999-9999</p>
+                    <p>Email: williamjosephhorn@gmail.com</p>
+                </div>
+            </footer>
         </div>
-
-
 
         <!-- ** JS Third Party ** -->
         <!-- import jQuery -->

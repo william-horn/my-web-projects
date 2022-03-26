@@ -53,6 +53,18 @@ function forInterval(start, stop, step, delay, callback) {
         count += step;
         if (count > stop) clearInterval(routine);
     }, delay);
+    return routine;
+}
+
+function whileInterval(start, step, delay, callback) {
+    let count = start;
+    if (callback(count)) return;
+    const routine = setInterval(() => {
+        count += step;
+        const result = callback(count);
+        if (result) return clearInterval(routine);
+    }, delay);
+    return routine;
 }
 
 // generate math sequence {12, 1, 2, ..., 12, 1, 2, ...} based on given index
@@ -179,5 +191,6 @@ gutil.generalIteration = generalIteration;
 gutil.arrayRemoveAllOf = arrayRemoveAllOf;
 gutil.objectRemoveAllOf = objectRemoveAllOf;
 gutil.getAllOf = getAllOf;
+gutil.whileInterval = whileInterval;
 
 export default gutil;

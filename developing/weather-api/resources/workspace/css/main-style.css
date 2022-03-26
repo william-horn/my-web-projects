@@ -7,7 +7,7 @@
 ? @author:                 William J. Horn
 ? @document-name:          main-style.css
 ? @document-created:       03/24/2022
-? @document-modified:      03/24/2022
+? @document-modified:      03/26/2022
 ? @document-version:       v1.0.0
 
 ==================================================================================================================================
@@ -16,6 +16,8 @@
 ==================
 | ABOUT DOCUMENT |
 ==================================================================================================================================
+
+Document containing the main CSS styling for the landing page.
 
 ==================================================================================================================================
 
@@ -31,6 +33,9 @@
 | DOCUMENT TODO |
 ==================================================================================================================================
 
+-   Reorganize selectors to group relevant sections of components together --NOT DONE
+-   Rely less on media queries for responsiveness. Look into making my own CSS framework or use someone else's --NOT DONE
+
 ==================================================================================================================================
 */
 
@@ -45,6 +50,7 @@
 
     --mainBackgroundColor: #abb2bc;
     --mainBackgroundColorOpacity-75: #abb2bcbd;
+    --secondBackgroundColor: #667891;
 
     --searchBackgroundColor: white;
 
@@ -74,31 +80,12 @@ body {
     font-family: var(--primaryFont);
 }
 
-header {
-    /* background-color: var(--stormBlue); */
-    /* background-color: var(--rainBlue); */
-    /* background-color: var(--sunnySkyBlue); */
-    /* background-color: #2A1F1D; */ /* brown */
-    /* background-color: #BAB9BF; */ /* light gray */
-    /* background-color: #CCD3D9; */ /* light blue */
-    /* background-color: var(--mainBackgroundColor); */ /* perfect blue */
-    padding: 30px 0 30px 0;
-}
-
 h1, h2, h3 {
     /* font-family: var(--primaryFont); */
     font-family: system-ui;
     color: #f3f3f3;
     font-weight: 900;
-}
-
-h1 {
-    /* color: #fffee3; */
-    /* color: #a3a3a3; */
-    /* text-shadow: 0 0 5px #a8a8a8; */
-    letter-spacing: 2px;
-    font-size: 3rem;
-    /* font-family: 'Source Code Pro', monospace; */
+    margin-bottom: 0;
 }
 
 h2 {
@@ -107,7 +94,7 @@ h2 {
 }
 
 h3 {
-    margin-bottom: 15px;
+    color: var(--stormBlue);
 }
 
 /* --------------- */
@@ -123,16 +110,46 @@ h3 {
 }
 
 .second-bg {
-    background-color: #667891;
+    background-color: var(--secondBackgroundColor);
 }
 
 .break-first p:first-child {
     word-break: break-all;
 }
 
+.invisible {
+    opacity: 0;
+}
+
+.fade-in {
+    animation: fadeIn ease 2s forwards;
+}
+
+@keyframes fadeIn {
+    0% { opacity: 0 }
+    100% { opacity: 1 }
+}
+
 /* ------------- */
 /* Top Container */
 /* ------------- */
+
+.big-heading {
+    letter-spacing: 2px;
+    font-size: 3rem;
+}
+
+.big-header {
+    /* background-color: var(--stormBlue); */
+    /* background-color: var(--rainBlue); */
+    /* background-color: var(--sunnySkyBlue); */
+    /* background-color: #2A1F1D; */ /* brown */
+    /* background-color: #BAB9BF; */ /* light gray */
+    /* background-color: #CCD3D9; */ /* light blue */
+    /* background-color: var(--mainBackgroundColor); */ /* perfect blue */
+    padding: 30px 0 30px 0;
+    background-color: #485466;
+}
 
 .wrapper {
     width: 100%;
@@ -149,20 +166,43 @@ h3 {
 .search-container {
     width: 100%;
     padding-top: 30px;
-    padding-bottom: 30px;
+    padding-bottom: 100px;
     max-width: 1100px;
 }
 
 .search-drop-down {
     display: none;
-    overflow-y: scroll;
     position: absolute;
     background-color: var(--searchBackgroundColor);
     width: 100px;
-    height: 100px;
     z-index: 10;
-    transform: translate(0, 15px);
+    transform: translate(0, 50px);
     width: calc(100% - 2*25px);
+    border-bottom-left-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.scroll {
+    overflow-y: scroll;
+    max-height: 200px;
+    width: 98%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+}
+
+.scroll::-webkit-scrollbar {
+    width: 10px;
+}
+  
+/* Track */
+.scroll::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+/* Handle */
+.scroll::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 5px;
 }
 
 /* add class for search result buttons in js */
@@ -173,24 +213,36 @@ h3 {
     background: none;
     text-align: left;
     width: 100%;
+    transition: background-color 0.2s;
 }
 
 .search-history-results button:hover {
-    background-color: black;
+    background-color: #dbdbdb;
 }
 /* add class for search result buttons in js */
 
-.weather-data > * {
-    /* border-radius: 10px; */
-    padding: 10px 15px;
-    box-shadow: 0 0 10px rgb(100, 100, 100);
+.search-icon {
+    height: 36px;
+    display: none;
+}
+
+.menu-icon {
+    width: 50px;
+    opacity: 0.5;
+    display: none;
+}
+
+.current-weather-container {
+    margin-top: 30px;
+    /* margin-bottom: 50px; */
 }
 
 .current-weather-display {
     width: 100%;
+    opacity: 0;
 }
 
-.current-weather-display p {
+.current-weather-display p, .weather-data p {
     font-size: 1.6rem;
     letter-spacing: 1px;
     font-family: system-ui;
@@ -198,25 +250,67 @@ h3 {
     text-shadow: 0 0 5px #737373;
 }
 
-.weather-icon {
-    box-shadow: 0 0 20px #96a2bc;
-    border-radius: 50%;
+/* general weather data display */
+.weather-data > * {
+    /* border-radius: 10px; */
+    padding: 15px;
+    display: flex;
+    background-color: var(--secondBackgroundColor);
 }
 
-.current-weather-display h2 {
-    font-size: 2.3rem;
+.weather-data > *:nth-child(2n) {
+    background-color: var(--mainBackgroundColor);
+}
+
+.weather-header p {
+    font-size: 1.5rem;
+    font-weight: 400;
+    margin-left: 20px;
+    margin-right: 20px;
+    text-align: center;
+}
+
+.weather-header h2 {
+    padding: 0;
+    margin-bottom: 10px;
+}
+
+.weather-icon {
+    box-shadow: 0 0 20px #74819b;
+    border-radius: 50%;
+    margin-top: 30px;
+}
+
+.weather-header h2 {
+    font-size: 2rem;
+}
+
+.weather-data p:first-child {
+    flex: 0.7;
 }
 
 .weather-data p:nth-child(2) {
     text-align: right;
     letter-spacing: initial;
-    flex: 0.4;
+    flex: 0.3;
+    font-weight: 100;
 }
 
 .weather-card {
     width: 100%;
-    max-width: 300px;
+    /* max-width: 300px; */
     min-width: 250px;
+    border-radius: 10px;
+    margin-bottom: 30px;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-top: 20px;
+    opacity: 0;
+}
+
+.weather-card .weather-icon {
+    margin-top: 20px;
+    margin-bottom: 30px;
 }
 
 .search-drop-down p {
@@ -229,36 +323,58 @@ h3 {
     padding: 15px 25px;
     box-shadow: 0 0 10px #c0c0c0;
     position: relative;
+    display: flex;
 }
 
 input {
-    padding-left: 10%;
-    padding-right: 10%;
+    padding-left: 15px;
+    padding-right: 15px;
     text-align: center;
     background: none;
     color: #c1c1c1;
     font-size: 1.7rem;
 }
 
-.forecast-container {
-    margin-top: 150px;
-}
-
-.forecast-container h2 {
+.forecast-container h2, footer h2 {
     color: white;
     font-size: 2em;
-    margin-bottom: 25px;
+    padding-top: 15px;
+    padding-bottom: 15px;
 }
 
-.weather-card {
-    border-radius: 10px;
-}
-
-.weather-card-container {
+.container {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-content: flex-start;
+    margin-top: 25px;
+    width: 70%;
+    margin: 0 auto;
+}
+
+footer p {
+    text-align: center;
+}
+
+footer .container {
+    height: 200px;
+    /* padding: 30px; */
+    flex-direction: column;
+    justify-content: center;
+}
+
+footer .container p {
+    color: black;
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#weather-card-container {
+    width: 100%;
+}
+
+#current-uvi {
+    font-weight: 900;
+    text-shadow: 0 0 5px black;
 }
 
 /* ------------- */
@@ -273,12 +389,36 @@ input {
         border-radius: 20px;
     }
 
+    #weather-card-container {
+        width: 70%;
+    }
+
+    .search-icon {
+        display: block;
+    }
+
+    .menu-icon {
+        display: block;
+    }
+
+    .current-weather-display .weather-data > * {
+        box-shadow: 0 0 10px rgb(100, 100, 100);
+    }
+
     .current-weather-display {
         width: 418px;
     }
 
+    .weather-card {
+        width: 350px;
+    }
+
     .forecast-container h2 {
         font-size: 3em;
+    }
+
+    .weather-header h2 {
+        font-size: 2.3rem;
     }
 
     .weather-data > * {
@@ -288,11 +428,11 @@ input {
 }
 
 @media screen and (min-width: 680px) {
-    h1 {
+    .big-heading {
         font-size: 4.5rem;
     }
 
-    .current-weather-display p {
+    .weather-data p {
         font-size: 2rem;
     }
 
@@ -300,14 +440,14 @@ input {
         width: 500px;
     }
 
-    .current-weather-display img {
+    .weather-header .weather-icon {
         width: 150px;
     }
 
 }
 
 @media screen and (min-width: 1370px) {
-    .current-weather-display p {
+    .current-weather-display .weather-data p {
         font-size: 2.3rem;
     }
 
