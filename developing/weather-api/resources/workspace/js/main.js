@@ -250,7 +250,7 @@ function loadSearchHistory() {
 function calcUVIndexColor(uvi) {
     // colors to transition between (green being a safe uvi, red being bad)
     const c_i = {r: 0, g: 255, b: 0};    // color initial
-    const c_f   = {r: 255, g: 0, b: 0};  // color final
+    const c_f = {r: 255, g: 0, b: 0};  // color final
 
     const scale = uvi/7; // magic number 7 for big uvi
     const inv = (1 - scale);
@@ -426,7 +426,6 @@ function processSearchQuery(input, addToHistory=true) {
 /* ------------------------ */
 
 function onSearchResultClicked(event) {
-    event.stopPropagation(); // prevent unnecessary event bubbling
     const target = event.target;
 
     if ($(target).hasClass("search-result-button")) {

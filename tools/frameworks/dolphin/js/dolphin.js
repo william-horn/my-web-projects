@@ -1,14 +1,14 @@
 /*
 ? @document-start
 ======================
-| PRIMARY STYLESHEET |
+| MAIN PROGRAM LOGIC |
 ==================================================================================================================================
 
 ? @author:                 William J. Horn
-? @document-name:          main-style.css
-? @document-created:       
-? @document-modified:      
-? @document-version:       v0.0.0
+? @document-name:          dolphin.js
+? @document-created:       03/26/2022
+? @document-modified:      03/26/2022
+? @document-version:       v1.0.0
 
 ==================================================================================================================================
 
@@ -17,7 +17,13 @@
 | ABOUT DOCUMENT |
 ==================================================================================================================================
 
-Coming soon
+Project inspiration: 
+    - easy DOM interaction
+    - automatic event handling/delegation
+    - group relevant elements with event data
+    
+Framework name ideas: 
+    - Dolphin
 
 ==================================================================================================================================
 
@@ -26,8 +32,6 @@ Coming soon
 | DOCUMENT CHANGELOG |
 ==================================================================================================================================
 
-Coming soon
-
 ==================================================================================================================================
 
 ? @document-todo
@@ -35,8 +39,21 @@ Coming soon
 | DOCUMENT TODO |
 ==================================================================================================================================
 
--   
-
 ==================================================================================================================================
 */
+
+
+const dolphin = {
+    lookups: {}
+}
+
+function fish(select) {
+    const query = select.trim();
+    if (query[0] === "^") return document.querySelectorAll(query.substr(1));
+    return document.querySelector(query);
+}
+
+
+
+
 

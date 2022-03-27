@@ -39,6 +39,7 @@ until I can find it a purpose. Behold, the "general utility" library.
 -       * Time (getClockHour, ...)
 -       * JS Routines (forInterval, ...)
 -       * Native Objects (shallowCopyArray, ...)
+-   Idea for Color library (call it Splash?)
 
 ==================================================================================================================================
 */

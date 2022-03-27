@@ -43,18 +43,11 @@ Coming soon
 /* ---------------- */
 /* Import Libraries */
 /* ---------------- */
-import gutil from "../../../../../tools/api/general/js/gutil-1.0.0.js";
-import datastore from "../../../../../tools/api/general/js/datastore-1.0.0.js";
-import PseudoEvent from "../../../../../tools/api/general/js/pseudo-events-2.1.0.js";
-import DynamicState from "../../../../../tools/api/general/js/dynamicstate-1.0.0.js";
-import EventHandler from "../../../../../tools/api/general/js/event-handler.1.0.0.js";
+
+const ui = fish("^p");
 
 
-const event = new PseudoEvent();
 
-event.connect(() => console.log("fired"));
-
-event.fire();
 
 /* ------------------------- */
 /* Global Element References */
