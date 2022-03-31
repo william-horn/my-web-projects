@@ -142,33 +142,60 @@ const tank = newSchool(el, [b1, b2, b3])
 
 releaseFish(el);
 
-ocean.env.useInheritedPrototype = function() {
-    Object.prototype.fishFor = fishFor;
-    Object.prototype.release = release;
+ocean.env.useInheritance = function() {
+    Node.prototype.fishFor = fishFor;
+    Node.prototype.release = release;
 }
 
 
 /*
+notes:
 
 if you put something inside of obj.__proto__, then it will act like a Lua __index metamethod.
 ex: 
 
-const obj = {};
-obj.__proto__.key = 'value';
+    const obj = {};
+    obj.__proto__.key = 'value';
 
-obj.key // => 'value'
+    obj.key // => 'value'
+
+... however, we DON'T want to do this. this will add fields to the global __proto__ chain links.
 
 creating a constructor function allows you to use the 'prototype' property which
-enables inheritance
+enables inheritance locally. 'prototype' is ONLY a property of functions (typically functions used as constructors)
 ex:
 
-function construct() {
-    this.name = 'Will';
-}
+    function construct() {
+        this.name = 'William Horn';
+    }
 
-construct.prototype.shared = 'shared!'; // this will be inherited to objects who's __proto__ points to this prototype
+    construct.prototype.shared = 'shared!'; // this will be inherited by objects who's __proto__ points to this prototype
+
+Use 'construct' as a constructor like this:
+
+    const obj = new construct(); 
+    console.log(obj.shared) // => 'shared!'
 
 
+This is an example of inheritance (from my testing): 
+
+    function construct_0() {
+        this.first = 'first';
+    }
+
+    construct_0.prototype.level_0 = 'level-0';
+
+    function construct_1() {
+        this.second = 'second';
+    }
+
+    construct_1.prototype = new construct_0();
+
+    const second = new construct_1();
+    console.log(second)
+    console.log(second.first) // => 'first'
+    console.log(second.second) // => 'second'
+    console.log(second.level_0) // => both objects reference the same property (level_0)
 
 
 */
