@@ -44,8 +44,6 @@ Coming soon
 /* Import Libraries */
 /* ---------------- */
 
-const ui = fish("^p");
-
 
 
 

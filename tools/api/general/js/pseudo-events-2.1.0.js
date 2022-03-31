@@ -7,7 +7,7 @@
 ? @author:                 William J. Horn
 ? @document-name:          pseudo-events.js
 ? @document-created:       03/08/2022
-? @document-modified:      03/22/2022
+? @document-modified:      03/28/2022
 ? @document-version:       v2.1.0
 ==================================================================================================================================
 
@@ -25,29 +25,7 @@ Coming soon
 | ABOUT API |
 ==================================================================================================================================
 
-Event.connect("click", () => {}))           // can disconnect with: Event.disconnect("click")
-Event.connect(() => {})                     // can only disconnect with: Event.disconnectAll()
-Event.strongConnect("click", () => {})      // can only disconnect with: Event.disconnect("click", true)
-Event.strongConnect(() => {})               // can only disconnect with: Event.disconnectAll(true)
-Event.factoryConnect("click", () => {})     // cannot disconnect once set
-Event.factoryConnect(() => {})              // cannot disconnect once set
-const customEvent = new Event()
-const connection1 = customEvent.connect( () => {} ) // connect just a function
-const connection2 = customEvent.connect( "eventName", () => {} ) // connect a function with a given name
-customEvent.disconnect(connection1) // disconnect a connection literal
-customEvent.disconnect("eventName") // disconnect all events with name "eventName"
-customEvent.disconnect("eventName", func)
-customEvent.disconnect(func)
-customEvent.disconnectAll() // disconnect all connections
-customEvent.pause(connection2) // pause a connection literal (this connection won't fire until it's resumed)
-customEvent.pause("eventName") // pause all events by name
-customEvent.pauseAll() // pause all events
-customEvent.resume(connection2) // resume connection literal
-customEvent.resume("eventName") // resume connections by name
-customEvent.resumeAll() // resume all connections
-customEvent.fire(connection2, ...) // fire a connection literal with arguments '...'
-customEvent.fire("eventName") // fire all connections by name with arguments '...'
-customEvent.fire(...) // fire all connections with arguments '...'
+See documentation
 
 ==================================================================================================================================
 
@@ -241,7 +219,7 @@ export default class PseudoEvent extends DynamicState {
         this.applyFilter(name, func, override, resumer);
     }
 
-    fire(...args) {
+    trigger(...args) {
         if (!this.hasPermissionToFire()) return;
         const connections = this.connections;
 
