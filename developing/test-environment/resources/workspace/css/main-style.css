@@ -40,3 +40,33 @@ Coming soon
 ==================================================================================================================================
 */
 
+div {
+    background-color: red;
+    opacity: 0.5;
+    width: 200px;
+    height: 200px;
+}
+
+div > div {
+    background-color: blue;
+}
+
+div > div > div {
+    background-color: green;
+}
+
+/* div:not([class='class-0-0-0']) {
+    display: none;
+}
+
+.class-0-0-0 {
+    position: relative;
+} */
+
+/* .class-0-0-0 button {
+    position: absolute;
+    right: -100px;
+} */
+
+
+

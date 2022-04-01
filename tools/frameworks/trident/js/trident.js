@@ -29,10 +29,12 @@ Framework name ideas:
     - Fishi
     - DeepC
     - DeepSea
+    - Trident *
+    - Neptune
 
 
 
-function name ideas:
+oceanic function name ideas:
 wash
 erode
 beach
@@ -41,7 +43,7 @@ flip
 sonar 
 goFish()
 findNemo()
-surf
+surf -- fetch? like 'surf' the web? kinda fits
 flounder
 vortex
 fishtank
@@ -53,6 +55,8 @@ dock
 shrimp
 absorb
 trench
+release
+
 
 
 listeners: {}
@@ -73,79 +77,105 @@ listeners: {}
 | DOCUMENT TODO |
 ==================================================================================================================================
 
+    todo: add jQuery support later (maybe)
+    todo: create element wrapper 
+    todo: lookinto 'Object.defaultProperties' and 'new Proxy()'
+
 ==================================================================================================================================
 */
-
 
 /* ----------------------- */
 /* Internal Program States */
 /* ----------------------- */
-// check for jQuery compatibility
-const jq = !!window.jQuery;
 
-// ocean package
-const ocean = {
-    env: {},
-    schools: {},
-}
+// export
+let ref;
 
-/* ---------------------- */
-/* General Util Functions */
-/* ---------------------- */
-// get children of element
-function getSchool(el=this) {
-    return jq ? $(el).children() : el.children;
-}
-
-// 'el=this' allows for using this function normally and as a method
-// ex: release(el) && el.release();
-// remove an individual element
-function release(el=this) {
-    if (jq) {
-        $(el).remove();
-    } else {
-        el.remove();
+// local
+{
+    // trident package
+    const trident = {
+        _env: {},
+        _wrapper_cache: new Map(),
     }
-}
 
-// query select an element
-function fishFor(selector) {
-    const el = this === window ? document : this; // if function is called as a method, use 'this', otherwise use document
-    const query = selector.trim();
-    return query[0] === '^' // could do /^\^/.exec(query), but query[0] is probably faster
-        ? el.querySelectorAll(query.substr(1)) : el.querySelector(query);
-}
-
-function releaseAll(el) {
-    const fishies = getSchool(el);
-    for (let i = fishies.length - 1; i <= 0; i--) {
-        release.call(fishies[i]);
+    const baseWrapper = {
+        clientHeight: {value: 'value'},
     }
+
+    /* ---------------------- */
+    /* General Util Functions */
+    /* ---------------------- */
+    // wraps new properties/methods around a given element
+    function wrap(element) {
+        Object.defineProperties(element, baseWrapper);
+        return element
+    }
+
+    // query select an element
+    baseWrapper.ref = {
+        value: function(selector) {
+            // if function is called as a method, use 'this', otherwise use document
+            const thisEl = this === window ? document : this;
+            const query = selector.trim();
+            const thatEl = thisEl.querySelector(query);
+
+            if (trident._wrapper_cache.get(thatEl)) {
+                console.log('already has wrapper:', thatEl);
+                return thatEl;
+            }
+
+            // could do /^\^/.exec(query), but query[0] is probably faster
+            trident._wrapper_cache.set(thatEl, true);
+            return wrap(thatEl);
+        }
+    }
+
+    // get children of element
+    baseWrapper.getChildren = {
+        value: function(el=this) {
+            return el.children;
+        }
+    }
+
+    baseWrapper.empty = {
+        value: function(el=this) {
+            const nodes = this.getChildren(el);
+            for (let i = nodes.length - 1; i >= 0; i--) {
+                nodes[i].remove();
+            }
+        }
+    }
+
+    baseWrapper.delegate = {
+        value: function(window, targets) {
+
+        }
+    }
+
+    baseWrapper.test = {
+        value: function() {
+            console.log('obj:', this); // the element itself
+            console.log('func: ', this.clientHeight); // searches in the element's custom properties, then legacy properties
+        }
+    }
+
+    ref = baseWrapper.ref.value;
+
 }
 
-function newSchool(el, targets) {
+// function htmlel() {}
+// htmlel.prototype = Node.prototype;
 
-}
-
-
-
-
-const el_0 = fishFor('#selector-0');
-const el_3 = el_0.fishFor('#selector-1')
-
-el.fishFor()
-
-el.release()
-
-const tank = newSchool(el, [b1, b2, b3])
-
-
-releaseFish(el);
-
-ocean.env.useInheritance = function() {
-    Node.prototype.fishFor = fishFor;
-    Node.prototype.release = release;
-}
+// class OceanWrap extends htmlel {
+//     constructor(el) {
+//         super();
+//         this.fish = fish;
+//         this.getChildren = getChildren;
+//         this.destroy = destroy;
+//         this.empty = empty;
+//     }
+// }
 
 
 /*

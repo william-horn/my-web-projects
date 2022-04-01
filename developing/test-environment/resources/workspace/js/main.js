@@ -43,7 +43,21 @@ Coming soon
 /* ---------------- */
 /* Import Libraries */
 /* ---------------- */
+const el_0 = ref('.class-0-0-0');
+const el_1 = el_0.ref('.class-2-0-0');
 
+
+// el_0.empty();
+// const el_1 = document.querySelector('button');
+
+
+
+// delegate(el_0, [el_1]).click();
+// el_1.click();
+
+
+// delegate(el_0, [el_1]);
+// el_0.click();
 
 
 
