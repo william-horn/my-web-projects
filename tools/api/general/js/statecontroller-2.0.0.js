@@ -89,6 +89,10 @@ export default class StateController {
         }
     }
 
+    getStateWeight() {
+        return this.state.weight;
+    }
+
     getComputedState() {
         return this._computedState;
     }

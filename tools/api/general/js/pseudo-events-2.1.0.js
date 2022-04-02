@@ -55,9 +55,9 @@ const connectionTypes = {
 }
 
 const eventStates = [
-    {name: 'listening-weak'},
-    {name: 'listening-strong'},
-    {name: 'paused-weak'},
+    {name: 'listening-weak', weight: 2},
+    {name: 'listening-strong', weight: 1},
+    {name: 'paused-weak', weight: 3},
     {name: 'paused-strong'},
 ]
 
@@ -116,34 +116,52 @@ class Connection extends StateController {
 }
 
 export default class PseudoEvent extends StateController {
-    constructor(eventName, eventParent) {
+    constructor(eventName, parentEvent) {
         // arrange args
         const typeof_eventName = typeof eventName;
-        [eventName, eventParent] = [
+        [eventName, parentEvent] = [
             typeof_eventName === 'object'
                 ? undefined : eventName,
 
-            eventParent
-                ? eventParent : (typeof_eventName === 'object') 
+            parentEvent
+                ? parentEvent : (typeof_eventName === 'object') 
                 ? eventName : undefined
         ]
 
         // call superclass
         super(eventStates);
 
+        this.className = 'PseudoEvent';
+        this.name = eventName; // the name of this event
+        this.parentEvent = parentEvent; // the parent of this event
+
         // add event to parent child list if parent exists
-        if (eventParent) 
-            eventParent.childEvents.push(this);
+        if (parentEvent) 
+            parentEvent._child_events.push(this);
+
+        // todo: fix bug with sum weights not adding as expected
+        // todo: update all child events by doing _computeState() when setState is called
+        // todo: when doing _computeState(), call parent _computeState() to move up the hierarchy
+        this._computeState = () => {
+            const thisState = this.getStateData();
+
+            if (!parentEvent) return thisState;
+            if (parentEvent.isState(thisState.value)) return thisState;
+
+            const sumWeight = parentEvent.getStateWeight() + this.getStateWeight();
+            console.log('sum weight: ', sumWeight);
+            const s = (sumWeight === 3 && this.findState('listening-weak'))
+                || (sumWeight === 4 && this.findState('paused-weak'))
+                || (sumWeight === 5 && this.findState('paused-strong'));
+                console.log('computed state: ', s);
+                return s;
+        }
 
         // initialize 
         this.setState('listening-strong');
 
-        this.className = 'PseudoEvent';
-        this.name = eventName; // the name of this event
-        this.parentEvent = eventParent; // the parent of this event
-
         this._connections = [];
-        this.childEvents = [];
+        this._child_events = [];
     }
 
     getOverrideState(name, override) {
@@ -154,10 +172,7 @@ export default class PseudoEvent extends StateController {
 
     // disconnect all weak connections (and strong connections if override is given)
     disconnectAll(override) {
-        gutil.arrayRemoveAllOf(
-            this._connections, 
-            val => val.isMutable(override)
-        );
+        // ! re-implement
     }
 
     // todo: implement override pause/resume all mechanic
@@ -173,27 +188,28 @@ export default class PseudoEvent extends StateController {
 
     applyFilter(connectionName, connectionFunc, override, action) {
         // data types BEFORE conversion
-        let isFunc_connectionFunc = typeof connectionFunc === 'function';
-        let isFunc_connectionName = typeof connectionName === 'function';
+        {
+            let isFunc_connectionFunc = typeof connectionFunc === 'function';
+            let isFunc_connectionName = typeof connectionName === 'function';
 
-        const connections = this._connections;
+            // arrange arguments to their intended values
+            // todo: there's probably a better, more generalized way to do this. think of it later.
+            // @note maybe use arrays to sort by type?
+            [connectionName, connectionFunc, override] = [
+                isFunc_connectionName
+                    ? undefined : connectionName,
 
-        // arrange arguments to their intended values
-        // todo: there's probably a better, more generalized way to do this. think of it later.
-        // @note maybe use arrays to sort by type?
-        [connectionName, connectionFunc, override] = [
-            isFunc_connectionName
-                ? undefined : connectionName,
+                isFunc_connectionName
+                    ? connectionName : isFunc_connectionFunc
+                    ? connectionFunc : undefined,
 
-            isFunc_connectionName
-                ? connectionName : isFunc_connectionFunc
-                ? connectionFunc : undefined,
-
-            connectionFunc === true 
-                ? connectionFunc : override
-        ];
+                connectionFunc === true 
+                    ? connectionFunc : override
+            ];
+        }
 
         // data types AFTER conversion
+        const connections = this._connections;
         const typeof_connectionName = typeof connectionName;
         const isObj_connectionName = typeof_connectionName === 'object';
         const isStr_connectionName = typeof_connectionName === 'string';
@@ -218,6 +234,7 @@ export default class PseudoEvent extends StateController {
         //         && (connectionFunc ? val.source === connectionFunc : true)
         // });
 
+        // ! re-implement
         // todo: this is slow and unintuitive. just use for loops. refactor this later.
         // * connectionName can be a string OR an object
         gutil.generalIteration(
@@ -235,15 +252,15 @@ export default class PseudoEvent extends StateController {
     // todo: get rid of generalIteration, replace with for loops later
     // disconnect a weak connection (or a strong connection if override is given)
     disconnect(name, func, override) {
-        this.applyFilter(name, func, override, disconnector);
+        // ! re-implement
     }
 
     pause(name, func, override) {
-        this.applyFilter(name, func, override, pauser);
+        // ! re-implement
     }
 
     resume(name, func, override) {
-        this.applyFilter(name, func, override, resumer);
+        // ! re-implement
     }
 
     // fire a single Connection object
@@ -256,7 +273,7 @@ export default class PseudoEvent extends StateController {
         const connections = this._connections;
         // if the pseudo event has no permission to fire, then gather all non-weak events
         // and fire them if needed
-        if (this.isActive()) {
+        if (checkComputedStateHere) {
 
             return;
         };
