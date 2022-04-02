@@ -30,6 +30,7 @@ Framework name ideas:
     - DeepC
     - DeepSea
     - Trident *
+    - Triton
     - Neptune
 
 
@@ -78,7 +79,7 @@ listeners: {}
 ==================================================================================================================================
 
     todo: add jQuery support later (maybe)
-    todo: create element wrapper 
+    todo: create element wrapper  --DONE (for now)
     todo: lookinto 'Object.defaultProperties' and 'new Proxy()'
 
 ==================================================================================================================================
@@ -90,30 +91,35 @@ listeners: {}
 
 // export
 let ref;
+let trident;
 
 // local
 {
     // trident package
-    const trident = {
+    trident = {
         _env: {},
+        _delegations: {},
         _wrapper_cache: new Map(),
+        _wrapper: {
+            baseWrapper: {
+                // sample: {value: 10, writable: true}
+            }
+        },
     }
 
-    const baseWrapper = {
-        clientHeight: {value: 'value'},
-    }
+    const wrapper = trident._wrapper.baseWrapper;
 
     /* ---------------------- */
     /* General Util Functions */
     /* ---------------------- */
     // wraps new properties/methods around a given element
     function wrap(element) {
-        Object.defineProperties(element, baseWrapper);
+        Object.defineProperties(element, wrapper);
         return element
     }
 
     // query select an element
-    baseWrapper.ref = {
+    wrapper.ref = {
         value: function(selector) {
             // if function is called as a method, use 'this', otherwise use document
             const thisEl = this === window ? document : this;
@@ -121,7 +127,7 @@ let ref;
             const thatEl = thisEl.querySelector(query);
 
             if (trident._wrapper_cache.get(thatEl)) {
-                console.log('already has wrapper:', thatEl);
+                console.log('getting cached wrapper', thatEl);
                 return thatEl;
             }
 
@@ -132,13 +138,13 @@ let ref;
     }
 
     // get children of element
-    baseWrapper.getChildren = {
+    wrapper.getChildren = {
         value: function(el=this) {
             return el.children;
         }
     }
 
-    baseWrapper.empty = {
+    wrapper.empty = {
         value: function(el=this) {
             const nodes = this.getChildren(el);
             for (let i = nodes.length - 1; i >= 0; i--) {
@@ -147,20 +153,20 @@ let ref;
         }
     }
 
-    baseWrapper.delegate = {
-        value: function(window, targets) {
+    wrapper.delegate = {
+        value: function(targets) {
 
         }
     }
 
-    baseWrapper.test = {
+    wrapper.test = {
         value: function() {
             console.log('obj:', this); // the element itself
             console.log('func: ', this.clientHeight); // searches in the element's custom properties, then legacy properties
         }
     }
 
-    ref = baseWrapper.ref.value;
+    ref = wrapper.ref.value;
 
 }
 

@@ -46,7 +46,7 @@ setTimeout(() => {
     debounceFunction() // debounce state is open, function WILL execute (updated state: closed)
 }, 2001) 
 function test() {
-    console.log("function code running")
+    console.log('function code running')
     
     this.open(); // this OR 
     debouncer.getDebounceData(test).open(); // this OR 
@@ -55,14 +55,14 @@ function test() {
 const debouncedFunction = debouncer.debounce(test);
 const debounceData = debouncer.getDebounceData(test);
 debouncedFunction(); // initial run
-debounceData.setStateTimeout("open", 5000);
+debounceData.setStateTimeout('open', 5000);
 setInterval(() => debouncedFunction(), 1000);
 setTimeout(() => debounceData.open(), 8000);
 ---
 const debounceFunction = debouncer.debounce(f)
 const debounceFunctionData = debouncer.getDebounceData(f)
-debounceFunctionData.isOpen() // returns: true; IF debounce state is set to "open"
-debounceFunctionData.isClosed() // returns: false; IF debounce state is set to "closed"
+debounceFunctionData.isOpen() // returns: true; IF debounce state is set to 'open'
+debounceFunctionData.isClosed() // returns: false; IF debounce state is set to 'closed'
 
 ==================================================================================================================================
 
@@ -76,8 +76,7 @@ debounceFunctionData.isClosed() // returns: false; IF debounce state is set to "
 ==================================================================================================================================
 */
 
-import PseudoEvent from "./pseudo-events-2.1.0.js";
-import DynamicState from "./dynamicstate-1.0.0.js";
+import StateController from './statecontroller-2.0.0';
 
 // debounce library
 const debouncer = {};
@@ -86,23 +85,23 @@ const debouncer = {};
 const debounced = new Map(); // {key: func}, {value: {...}}
 
 // debounce state refs
-const debStates = {
-    "open": "open",
-    "closed": "closed"
-}
+const debStates = [
+    {name: 'open'},
+    {name: 'closed'}
+]
 
 const invertedDebStates = {
-    "open": "closed",
-    "closed": "open"
+    'open': 'closed',
+    'closed': 'open'
 }
 
 // class for debounce data
-class DebounceData extends DynamicState {
+class DebounceData extends StateController {
     constructor(f) {
         super(debStates);
-        this.setState("open");
+        this.setState('open');
 
-        this.className = "DebounceData";
+        this.className = 'DebounceData';
         this.source = f;
         this.stateTimeoutRoutine = undefined;
     }
@@ -120,7 +119,7 @@ class DebounceData extends DynamicState {
         // (!debStates[state]) ==> return if state is invalid type
         // OR
         // (this.stateTimeoutRoutine && !override) ==> return if a stateTimeoutRoutine exists with no override
-        if ((this.stateTimeoutRoutine && !override) || !this.states[state]) return;
+        if ((this.stateTimeoutRoutine && !override) || !this.hasState(state)) return;
         this.clearStateTimeoutRoutine();
         this.setState(state);
     }
@@ -130,11 +129,11 @@ class DebounceData extends DynamicState {
     }
 
     close(override=false) {
-        this.setDebounceState("closed", override);
+        this.setDebounceState('closed', override);
     }
 
     open(override=false) {
-        this.setDebounceState("open", override);
+        this.setDebounceState('open', override);
     }
 
     callSource(...args) {
@@ -142,11 +141,11 @@ class DebounceData extends DynamicState {
     }
 
     isClosed() {
-        return this.isState("closed");
+        return this.isState('closed');
     }
 
     isOpen() {
-        return this.isState("open");
+        return this.isState('open');
     }
 
     setStateTimeout(state, time) {
@@ -175,7 +174,7 @@ function debounce(f, delay) {
         if (debRef.isOpen()) {
             debRef.close();
             debRef.callSource(...args);
-            if (delay) debRef.setStateTimeout("closed", delay);
+            if (delay) debRef.setStateTimeout('closed', delay);
         }
     }
 }

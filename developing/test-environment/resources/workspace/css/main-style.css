@@ -42,9 +42,11 @@ Coming soon
 
 div {
     background-color: red;
-    opacity: 0.5;
+    opacity: 1;
     width: 200px;
     height: 200px;
+    margin-top: 10px;
+    margin-left: 100px;
 }
 
 div > div {

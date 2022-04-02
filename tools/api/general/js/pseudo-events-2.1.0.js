@@ -7,8 +7,8 @@
 ? @author:                 William J. Horn
 ? @document-name:          pseudo-events.js
 ? @document-created:       03/08/2022
-? @document-modified:      03/28/2022
-? @document-version:       v2.1.0
+? @document-modified:      04/01/2022
+? @document-version:       v3.1.0
 ==================================================================================================================================
 
 ? @document-info
@@ -37,72 +37,94 @@ See documentation
 -   Make 'this' inside the Event.fire() callback refer to the object that the Event object is inside of
 -   Allow Connection object to be passed to 'disconnect' as a literal for individual disconnections --DONE
 -   Add hierarchical event bubbling
+-   Currently 'pauseAll' and 'resumeAll' will not affect strongly-connected events. Implement an override
+    feature for these methods in the future. Maybe add 'paused-strong' state?
+
 
 ==================================================================================================================================
 */
 
-import gutil from "./gutil-1.0.0.js";
-import DynamicState from "./dynamicstate-1.0.0.js";
+import gutil from './gutil-1.0.0.js';
+import StateController from './statecontroller-2.0.0.js';
 
 const connectionTypes = {
-    "none": "none", // connection not made yet
-    "factory": "factory", // immutable event (cannot disconnect)
-    "strong": "strong", // mutable event; requires override
-    "weak": "weak" // mutable event; does not require override
+    'none': 'not connected', // connection not made yet
+    'factory': 'factory', // immutable event (cannot disconnect)
+    'strong': 'strong', // mutable event; requires override
+    'weak': 'weak' // mutable event; does not require override
 }
 
-const eventStates = {
-    "listening": "listening",
-    "paused": "paused"
-}
+const eventStates = [
+    {name: 'listening-weak'},
+    {name: 'listening-strong'},
+    {name: 'paused-weak'},
+    {name: 'paused-strong'},
+]
 
 // private methods of PseudoEvent
-function disconnector(key) {
-    this.connections.splice(key, 1);
-}
+// ! delete after re-implementation
+// function disconnector(key) {
+//     this.connections.splice(key, 1);
+// }
 
-function pauser(key) {
-    this.connections[key].setState("paused");
-}
+// function pauser(key) {
+//     this.connections[key].setState('paused-weak');
+// }
 
-function resumer(key) {
-    this.connections[key].setState("listening");
-}
+// function resumer(key) {
+//     this.connections[key].setState('listening');
+// }
 
 // read-only object
 // contains connection information
-class Connection extends DynamicState {
-    constructor(connectionType, name, func) { // connectionType="type", name*="name", func=func
+class Connection extends StateController {
+    constructor(connectionType, name, func) { // connectionType='type', name*='name', func=func
         [name, func] = [
             func ? name : undefined,
             func ? func : name
         ]
 
+        // call super constructor
         super(eventStates);
-        this.setState("listening");
 
-        this.className = "Connection";
+        // compute if a single connection is active
+        this._computeState = () => {
+            if (this._connection_type === 'factory') return true; // factory connections should always fire
+            if (this.isState('paused-strong')) return false; // paused-strong states will not allow any firing
+    
+            return this._connection_type === 'strong'
+                && (this.isState('listening-strong') || this.isState('paused-weak'))
+                || this._connection_type === 'weak'
+                && (this.isState('listening-strong') || this.isState('listening-weak'));
+        }
+
+        this._connection_type = connectionTypes[connectionType] 
+            || connectionTypes.none;
+
+        // set initial state
+        this.setState('listening-strong');
+
+        // this._active = true; // default
+        this.className = 'Connection';
         this.name = name;
         this.source = func;
-        this.connectionType = connectionTypes[connectionType] || connectionTypes.none;
     }
 
-    isMutable(override) {
-        return this.connectionType === "weak" 
-            || override && this.connectionType != "factory";
+    isActive() {
+        return this.getComputedState().value;
     }
 }
 
-export default class PseudoEvent extends DynamicState {
+export default class PseudoEvent extends StateController {
     constructor(eventName, eventParent) {
         // arrange args
         const typeof_eventName = typeof eventName;
         [eventName, eventParent] = [
-            typeof_eventName === "object"
+            typeof_eventName === 'object'
                 ? undefined : eventName,
 
             eventParent
-                ? eventParent : (typeof_eventName === "object") 
+                ? eventParent : (typeof_eventName === 'object') 
                 ? eventName : undefined
         ]
 
@@ -110,48 +132,51 @@ export default class PseudoEvent extends DynamicState {
         super(eventStates);
 
         // add event to parent child list if parent exists
-        if (eventParent) eventParent.childEvents.push(this)
+        if (eventParent) 
+            eventParent.childEvents.push(this);
 
         // initialize 
-        this.setState("listening");
-        this.className = "PseudoEvent";
+        this.setState('listening-strong');
 
+        this.className = 'PseudoEvent';
         this.name = eventName; // the name of this event
         this.parentEvent = eventParent; // the parent of this event
 
-        this.connections = [];
+        this._connections = [];
         this.childEvents = [];
     }
 
-    // check if parent event allows child event firing permission (if parent event exists, otherwise event always has permission)
-    hasPermissionToFire() {
-        return this.isState("listening")
-            && (this.parentEvent ? this.parentEvent.hasPermissionToFire() : true);
+    getOverrideState(name, override) {
+        const state = name + (override ? '-strong' : '-weak');
+        if (!this.hasState(state)) return;
+        return state;
     }
 
     // disconnect all weak connections (and strong connections if override is given)
     disconnectAll(override) {
         gutil.arrayRemoveAllOf(
-            this.connections, 
+            this._connections, 
             val => val.isMutable(override)
         );
     }
 
     // todo: implement override pause/resume all mechanic
     pauseAll(override) {
-        this.setState("paused");
+        this.setState(this.getOverrideState('paused', override));
     }
 
     resumeAll(override) {
-        this.setState("listening");
+        if ((this.isState('paused-strong') || this.isState('listening-weak')) && !override)
+            return this.setState('listening-weak');
+        this.setState('listening-strong');
     }
 
     applyFilter(connectionName, connectionFunc, override, action) {
         // data types BEFORE conversion
-        let isFunc_connectionFunc = typeof connectionFunc === "function";
-        let isFunc_connectionName = typeof connectionName === "function";
+        let isFunc_connectionFunc = typeof connectionFunc === 'function';
+        let isFunc_connectionName = typeof connectionName === 'function';
 
-        const connections = this.connections;
+        const connections = this._connections;
 
         // arrange arguments to their intended values
         // todo: there's probably a better, more generalized way to do this. think of it later.
@@ -170,29 +195,30 @@ export default class PseudoEvent extends DynamicState {
 
         // data types AFTER conversion
         const typeof_connectionName = typeof connectionName;
-        const isObj_connectionName = typeof_connectionName === "object";
-        const isStr_connectionName = typeof_connectionName === "string";
+        const isObj_connectionName = typeof_connectionName === 'object';
+        const isStr_connectionName = typeof_connectionName === 'string';
 
         // the above logic will produce:
         //
         // args:                                         connectionName  connectionFunc  override
         //
         // applyFilter(connection, true)         =>      connection,     undefined,      true
-        // applyFilter("eventName", true)        =>      "eventName",    undefined,      true
+        // applyFilter('eventName', true)        =>      'eventName',    undefined,      true
         // applyFilter(f, true)                  =>      undefined,      f,              true
-        // applyFilter("eventName", f, true)     =>      "eventName",    f,              true
+        // applyFilter('eventName', f, true)     =>      'eventName',    f,              true
         // applyFilter(connection)               =>      connection,     undefined,      undefined
-        // applyFilter("eventName")              =>      "eventName",    undefined,      undefined
-        // applyFilter("eventName", f)           =>      "eventName",    f,              undefined
+        // applyFilter('eventName')              =>      'eventName',    undefined,      undefined
+        // applyFilter('eventName', f)           =>      'eventName',    f,              undefined
         // applyFilter(f)                        =>      undefined,      f,              undefined
 
         // return filtered-out array of connections by name/function
-        // return gutil.getAllOf(this.connections, val => {
+        // return gutil.getAllOf(this._connections, val => {
         //     return val.isMutable(override)
         //         && (connectionName ? val.name === connectionName : true)
         //         && (connectionFunc ? val.source === connectionFunc : true)
         // });
 
+        // todo: this is slow and unintuitive. just use for loops. refactor this later.
         // * connectionName can be a string OR an object
         gutil.generalIteration(
             connections,
@@ -206,6 +232,7 @@ export default class PseudoEvent extends DynamicState {
         );
     }
 
+    // todo: get rid of generalIteration, replace with for loops later
     // disconnect a weak connection (or a strong connection if override is given)
     disconnect(name, func, override) {
         this.applyFilter(name, func, override, disconnector);
@@ -219,20 +246,30 @@ export default class PseudoEvent extends DynamicState {
         this.applyFilter(name, func, override, resumer);
     }
 
-    trigger(...args) {
-        if (!this.hasPermissionToFire()) return;
-        const connections = this.connections;
+    // fire a single Connection object
+    fire(conn, ...args) {
+        if (conn.isActive()) conn.source(...args);
+    }
 
-        for (let i = 0; i < connections.length; i++) {
-            const connection = connections[i];
-            if (connection.isState("listening")) connection.source(...args);
-        }
+    // todo: maybe add a setting that lets the user fire all child event listener connections too?
+    trigger(...args) {
+        const connections = this._connections;
+        // if the pseudo event has no permission to fire, then gather all non-weak events
+        // and fire them if needed
+        if (this.isActive()) {
+
+            return;
+        };
+
+        // fire all eligible connections
+        for (let i = 0; i < connections.length; i++)
+            this.fire(connections[i]);
     }
 
     // private
     connectState(state, name, func) {
         const connection = new Connection(state, name, func);
-        this.connections.push(connection);
+        this._connections.push(connection);
         return connection;
     }
 
