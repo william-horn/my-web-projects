@@ -41,16 +41,18 @@ Coming soon
 // weak implementation of PseudoEvent
 // todo: Find a way to re-implement 'onStateChanged' without causing stack loop with pseudo-events
 class Event {
+    #connections = [];
+
     constructor() {
-        this._connections = [];
+        //this._connections = [];
     }
 
     connect(func) {
-        this._connections.push(func);
+        this.#connections.push(func);
     }
 
     trigger(...args) {
-        const connections = this._connections;
+        const connections = this.#connections;
         for (let i = 0; i < connections.length; i++) {
             connections[i](...args);
         }
@@ -58,12 +60,17 @@ class Event {
 }
 
 export default class StateController { 
+    // private
+    #states;
+    #computedState = {value: undefined};
+
+    // public
+    className = 'StateController';
+    state = {name: 'initial', id: 0, weight: 0}; // default state
+    onStateChanged = new Event();
+
     constructor(states) {
-        this.className = 'StateController';
-        this._states = states;
-        this._computedState = {value: undefined};
-        this._onStateChanged = new Event();
-        this.state = {name: 'initial', id: 0, weight: 0}; // default state
+        this.#states = states;
 
         // assign default state values
         for (let i = 0; i < states.length; i++) {
@@ -75,17 +82,12 @@ export default class StateController {
         this.heaviestState = this.getHeaviestState();
     }
 
-    // _computeState() {
-    //     ...
-    // }
-
     // getHeaviestState(['state1', 'state2', ...])
-    getHeaviestState(stateList=this._states) {
+    getHeaviestState(stateList=this.#states) {
         let heavy = stateList[0];
         for (let i = 1; i < stateList.length; i++) {
             const compState = stateList[i];
-            if (compState.weight > heavy.weight)
-                heavy = compState;
+            if (compState.weight > heavy.weight) heavy = compState;
         }
     }
 
@@ -94,7 +96,7 @@ export default class StateController {
     }
 
     getComputedState() {
-        return this._computedState;
+        return this.#computedState;
     }
 
     getStateId() {
@@ -109,11 +111,9 @@ export default class StateController {
         return this.state.name;
     }
 
-    // ! deprecated, use getStateName() instead !
-    getState() {
+    getState() { // ! deprecated, use getStateName() instead !
         return this.state.name;
     }
-    // ! -------------------------------------- !
 
     hasState(state) {
         const result = Boolean(this.findState(state));
@@ -122,7 +122,11 @@ export default class StateController {
     }
 
     findState(state) {
-        return this._states.find(realState => realState.name === state);
+        return this.#states.find(realState => realState.name === state);
+    }
+
+    setComputedState(state) {
+        this.#computedState.value = state;
     }
 
     setState(newState) {
@@ -138,8 +142,8 @@ export default class StateController {
 
         // update state info
         this.state = foundState;
-        if (this._computeState) this._computedState.value = this._computeState();
-        this._onStateChanged.trigger(oldState, foundState);
+        this.setComputedState(foundState);
+        this.onStateChanged.trigger(oldState, foundState);
     }
 
     isState(state) {

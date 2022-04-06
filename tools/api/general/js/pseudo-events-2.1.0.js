@@ -39,129 +39,187 @@ See documentation
 -   Add hierarchical event bubbling
 -   Currently 'pauseAll' and 'resumeAll' will not affect strongly-connected events. Implement an override
     feature for these methods in the future. Maybe add 'paused-strong' state?
+-   Replace 'strong'/'weak' events with priority id that can be arbitrarily defined
 
 
 ==================================================================================================================================
 */
 
-import gutil from './gutil-1.0.0.js';
 import StateController from './statecontroller-2.0.0.js';
 
-const connectionTypes = {
-    'none': 'not connected', // connection not made yet
-    'factory': 'factory', // immutable event (cannot disconnect)
-    'strong': 'strong', // mutable event; requires override
-    'weak': 'weak' // mutable event; does not require override
+/*
+Combination of event states can be represented as a system of equations:
+
+case #1: if no parent event exists, return state of self
+case #2: if child and parent states are equivalent, return the mutual state
+case #3: if sum(parentState, childState) is < 0, then at least one state is paused-strong, so return paused-strong
+else:
+
+SYSTEM => {
+    eq_0 =>     P(a) + C(b) = a      (unique)
+    eq_1 =>     P(c) + C(b) = a      (common, same as eq_0)
+    eq_2 =>     P(b) + C(a) = a      (common, same as eq_0)
+    eq_3 =>     P(b) + C(c) = c      (unique)
+    eq_4 =>     P(c) + C(a) = b      (unique)
+    eq_5 =>     P(a) + C(c) = b      (common, same as eq_4)
 }
 
+WHERE:
+    a = listening-weak
+    b = listening-strong
+    c = paused-weak
+    P(s) = Parent event with state 's'
+    C(s) = Child event with state 's'
+
+Removing the common equations, we get:
+
+REDUCED SYSTEM => {
+    eq_0 =>     P(a) + C(b) = a
+    eq_1 =>     P(b) + C(c) = c
+    eq_2 =>     P(c) + C(a) = b
+}
+
+note:
+    in general, the sum of two states can be any value S, such that S ∉ {O(s)}-{s}, so that each equation (combination of states) can 
+    be distinguished and we can decern what combination of states resulted in that sum. Therefore, a useful generalization
+    of this system could be represented as such:
+
+GENERAL SYSTEM => {
+    eq_0 =>     a + b = s       (s + 0 = listening-weak)
+    eq_1 =>     b + c = s + 1   (s + 1 = paused-weak)
+    eq_2 =>     c + a = s + 2   (s + 2 = paused-strong)
+}
+
+WHERE:
+    's' can be any value.
+
+Given a value of 's', we can reduce this system using gaussian elimination to conclude that: 
+
+    a = b + 1
+
+Therefore, 
+
+    a + b = s
+    =>  b + 1 + b = s
+    =>  2b + 1 = s
+    =>  b = (1/2)s - 1/2
+
+In conclusion:
+
+    for any value 's' in the general system, the solutions for unknowns a, b, and c, are:
+        a = (1/2)s + 1/2
+        b = (1/2)s - 1/2
+        c = (1/2)s + 3/2
+    
+    Or more simply, when using these variables in the general system equations you can factor out the common (1/2)s term
+    which will result in:
+        a = 1/2
+        b = -1/2
+        c = 3/2
+
+*/
+
+// !warning: ordering of items in this array matters
 const eventStates = [
-    {name: 'listening-weak', weight: 2},
-    {name: 'listening-strong', weight: 1},
-    {name: 'paused-weak', weight: 3},
-    {name: 'paused-strong'},
+    {name: 'listening-weak', weight: 0.5},      // index 0 when sum(parentWeight, childWeight) === 0
+    {name: 'paused-weak', weight: 1.5},         // index 1 when sum(parentWeight, childWeight) === 1
+    {name: 'paused-strong', weight: -2},        // index 2 when sum(parentWeight, childWeight) === 2 (weight = -2 to ensure sum will always be < 0)
+    {name: 'listening-strong', weight: -0.5},
 ]
 
-// private methods of PseudoEvent
-// ! delete after re-implementation
-// function disconnector(key) {
-//     this.connections.splice(key, 1);
-// }
+export default class PseudoEvent extends StateController {
+    // private
+    #connections = {
+        factory: [],
+        strong: [],
+        weak: [],
+    };
 
-// function pauser(key) {
-//     this.connections[key].setState('paused-weak');
-// }
+    // public
+    // inherits:
+        // states => StateController
+        // onStateChanged => StateController
+    className = 'PseudoEvent';
+    childEvents = [];
 
-// function resumer(key) {
-//     this.connections[key].setState('listening');
-// }
+    constructor(eventName, parentEvent) {
+        // arrange args
+        {
+            const typeof_eventName = typeof eventName;
+            [eventName, parentEvent] = [
+                typeof_eventName === 'object'
+                    ? undefined : eventName,
 
-// read-only object
-// contains connection information
-class Connection extends StateController {
-    constructor(connectionType, name, func) { // connectionType='type', name*='name', func=func
+                parentEvent
+                    ? parentEvent : (typeof_eventName === 'object') 
+                    ? eventName : undefined
+            ]
+        }
+
+        // call superclass
+        super(eventStates);
+        this.name = eventName; // the name of this event
+        this.parentEvent = parentEvent; // the parent of this event
+
+        // add event to parent child list if parent exists
+        if (parentEvent) parentEvent.childEvents.push(this);
+
+        // initialize 
+        this.setState('listening-strong');
+    }
+
+    // private
+    #connectByType(type, name, func) {
         [name, func] = [
             func ? name : undefined,
             func ? func : name
         ]
 
-        // call super constructor
-        super(eventStates);
+        // get private connection data
+        const connections = this.#connections;
 
-        // compute if a single connection is active
-        this._computeState = () => {
-            if (this._connection_type === 'factory') return true; // factory connections should always fire
-            if (this.isState('paused-strong')) return false; // paused-strong states will not allow any firing
-    
-            return this._connection_type === 'strong'
-                && (this.isState('listening-strong') || this.isState('paused-weak'))
-                || this._connection_type === 'weak'
-                && (this.isState('listening-strong') || this.isState('listening-weak'));
+        const connection = {
+            source: func, // callback function
+            name: name, // arbitrary name of connection
+            type: type, // type of connection (factory | strong | weak)
+            enabled: true, // whether the connection may trigger
         }
 
-        this._connection_type = connectionTypes[connectionType] 
-            || connectionTypes.none;
-
-        // set initial state
-        this.setState('listening-strong');
-
-        // this._active = true; // default
-        this.className = 'Connection';
-        this.name = name;
-        this.source = func;
+        connections[type].push(connection);
+        return connection;
     }
 
-    isActive() {
-        return this.getComputedState().value;
-    }
-}
+    // public
+    computeStates() {
+        const thisState = this.getStateData();
+        const parentEvent = this.parentEvent;
+        const childEvents = this.childEvents;
 
-export default class PseudoEvent extends StateController {
-    constructor(eventName, parentEvent) {
-        // arrange args
-        const typeof_eventName = typeof eventName;
-        [eventName, parentEvent] = [
-            typeof_eventName === 'object'
-                ? undefined : eventName,
+        // ! should not be using 'return' here
+        // case #1: if event has no parent, set it's computed state to it's desired state
+        if (!parentEvent) return; // return undefined (computed state is already set to desired state)
 
-            parentEvent
-                ? parentEvent : (typeof_eventName === 'object') 
-                ? eventName : undefined
-        ]
+        // case #2: if the parent event and child event share the same state, then set that state to the child
+        const parentComputedState = parentEvent.getComputedState().value;
+        if (parentComputedState === thisState) return this.setComputedState(thisState); // return undefined
 
-        // call superclass
-        super(eventStates);
+        // case #3: if the sum of states is less than 0, then one of the states are 'paused-strong', so return that
+        const sumStateWeight = parentComputedState.weight + this.getStateWeight();
+        if (sumStateWeight < 0) return this.setComputedState(this.findState('paused-strong'));
 
-        this.className = 'PseudoEvent';
-        this.name = eventName; // the name of this event
-        this.parentEvent = parentEvent; // the parent of this event
+        // else: set the computed state from the 'eventStates' object based on the sum of the two states
+        this.setComputedState(eventStates[sumStateWeight]);
 
-        // add event to parent child list if parent exists
-        if (parentEvent) 
-            parentEvent._child_events.push(this);
-
-        // todo: fix bug with sum weights not adding as expected
-        // todo: update all child events by doing _computeState() when setState is called
-        // todo: when doing _computeState(), call parent _computeState() to move up the hierarchy
-        this._computeState = () => {
-            const thisState = this.getStateData();
-
-            if (!parentEvent) return thisState;
-            if (parentEvent.isState(thisState.value)) return thisState;
-
-            const sumWeight = parentEvent.getStateWeight() + this.getStateWeight();
-            console.log('sum weight: ', sumWeight);
-            const s = (sumWeight === 3 && this.findState('listening-weak'))
-                || (sumWeight === 4 && this.findState('paused-weak'))
-                || (sumWeight === 5 && this.findState('paused-strong'));
-                console.log('computed state: ', s);
-                return s;
+        // recursively update computed state to descendant events
+        for (let i = 0; i < childEvents.length; i++) {
+            const child = childEvents[i];
+            child.computeStates();
         }
+    }
 
-        // initialize 
-        this.setState('listening-strong');
-
-        this._connections = [];
-        this._child_events = [];
+    setState(state) {
+        super.setState(state);
+        this.computeStates();
     }
 
     getOverrideState(name, override) {
@@ -209,7 +267,7 @@ export default class PseudoEvent extends StateController {
         }
 
         // data types AFTER conversion
-        const connections = this._connections;
+        const connections = this.#connections;
         const typeof_connectionName = typeof connectionName;
         const isObj_connectionName = typeof_connectionName === 'object';
         const isStr_connectionName = typeof_connectionName === 'string';
@@ -228,7 +286,7 @@ export default class PseudoEvent extends StateController {
         // applyFilter(f)                        =>      undefined,      f,              undefined
 
         // return filtered-out array of connections by name/function
-        // return gutil.getAllOf(this._connections, val => {
+        // return gutil.getAllOf(this.#connections, val => {
         //     return val.isMutable(override)
         //         && (connectionName ? val.name === connectionName : true)
         //         && (connectionFunc ? val.source === connectionFunc : true)
@@ -270,38 +328,35 @@ export default class PseudoEvent extends StateController {
 
     // todo: maybe add a setting that lets the user fire all child event listener connections too?
     trigger(...args) {
-        const connections = this._connections;
-        // if the pseudo event has no permission to fire, then gather all non-weak events
-        // and fire them if needed
+        const connections = this.#connections;
+        //const connections = {};
+
         if (checkComputedStateHere) {
 
             return;
         };
 
-        // fire all eligible connections
-        for (let i = 0; i < connections.length; i++)
-            this.fire(connections[i]);
-    }
-
-    // private
-    connectState(state, name, func) {
-        const connection = new Connection(state, name, func);
-        this._connections.push(connection);
-        return connection;
+        // fire all connections
+        for (let connType in connections) {
+            const connCategory = connections[connType];
+            for (let i = 0; i < connCategory.length; i++) {
+                this.fire(connCategory[i], ...args);
+            }
+        }
     }
 
     // create weak connection
     connect(name, func) {
-        return this.connectState(connectionTypes.weak, name, func);
+        return this.#connectByType('weak', name, func);
     }
 
     // create strong connection
     strongConnect(name, func) {
-        return this.connectState(connectionTypes.strong, name, func);
+        return this.#connectByType('strong', name, func);
     }
 
     // create factory connection
     factoryConnect(name, func) {
-        return this.connectState(connectionTypes.factory, name, func);
+        return this.#connectByType('factory', name, func);
     }
 }

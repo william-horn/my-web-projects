@@ -48,15 +48,26 @@ import PseudoEvent from '../../../../../tools/api/general/js/pseudo-events-2.1.0
 
 const ev_0 = new PseudoEvent();
 const ev_1 = new PseudoEvent(ev_0);
+const ev_2 = new PseudoEvent(ev_1);
+const ev_3 = new PseudoEvent(ev_2);
 
 const f_0 = () => console.log('func 1');
 const f_1 = () => console.log('func 2');
 const f_2 = () => console.log('func 3');
 
-ev_0.pauseAll(true); // pause-strong
-ev_0.resumeAll();
-ev_1._computeState();
+ev_0.connect(f_0);
+ev_1.connect(f_0);
+ev_2.connect(f_0);
+ev_3.connect(f_0);
+
+// ev_0.pauseAll(true); // pause-strong
+// ev_0.resumeAll(); // listening-weak
 // ev_1: // listening-strong
+ev_0.pauseAll(true); // paused-strong
+ev_0.resumeAll(); // listening-weak
+ev_1.pauseAll() // paused-weak
+ev_1.resumeAll() // listening-strong
+ev_0.resumeAll(true);
 console.log(ev_0);
 
 // el_0.delegate('click', [

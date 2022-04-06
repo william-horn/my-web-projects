@@ -5,7 +5,7 @@
 ==================================================================================================================================
 
 ? @author:                 William J. Horn
-? @document-name:          dolphin.js
+? @document-name:          trident.js
 ? @document-created:       03/26/2022
 ? @document-modified:      03/26/2022
 ? @document-version:       v1.0.0
