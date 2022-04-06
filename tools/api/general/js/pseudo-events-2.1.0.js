@@ -165,7 +165,7 @@ export default class PseudoEvent extends StateController {
         if (parentEvent) parentEvent.childEvents.push(this);
 
         // initialize 
-        this.setState('listening-strong');
+        this.#setState('listening-strong');
     }
 
     // private
@@ -189,13 +189,10 @@ export default class PseudoEvent extends StateController {
         return connection;
     }
 
-    // public
-    computeStates() {
+    #computeNewState() {
         const thisState = this.getStateData();
         const parentEvent = this.parentEvent;
-        const childEvents = this.childEvents;
 
-        // ! should not be using 'return' here
         // case #1: if event has no parent, set it's computed state to it's desired state
         if (!parentEvent) return; // return undefined (computed state is already set to desired state)
 
@@ -209,17 +206,24 @@ export default class PseudoEvent extends StateController {
 
         // else: set the computed state from the 'eventStates' object based on the sum of the two states
         this.setComputedState(eventStates[sumStateWeight]);
+    }
+
+    #computeStates() {
+        const childEvents = this.childEvents;
+
+        // compute new internal event state based on parent state and own state
+        this.#computeNewState();
 
         // recursively update computed state to descendant events
         for (let i = 0; i < childEvents.length; i++) {
             const child = childEvents[i];
-            child.computeStates();
+            child.#computeStates();
         }
     }
 
-    setState(state) {
+    #setState(state) {
         super.setState(state);
-        this.computeStates();
+        this.#computeStates();
     }
 
     getOverrideState(name, override) {
@@ -235,13 +239,13 @@ export default class PseudoEvent extends StateController {
 
     // todo: implement override pause/resume all mechanic
     pauseAll(override) {
-        this.setState(this.getOverrideState('paused', override));
+        this.#setState(this.getOverrideState('paused', override));
     }
 
     resumeAll(override) {
         if ((this.isState('paused-strong') || this.isState('listening-weak')) && !override)
-            return this.setState('listening-weak');
-        this.setState('listening-strong');
+            return this.#setState('listening-weak');
+        this.#setState('listening-strong');
     }
 
     applyFilter(connectionName, connectionFunc, override, action) {

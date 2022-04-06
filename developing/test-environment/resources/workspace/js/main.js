@@ -67,7 +67,7 @@ ev_0.pauseAll(true); // paused-strong
 ev_0.resumeAll(); // listening-weak
 ev_1.pauseAll() // paused-weak
 ev_1.resumeAll() // listening-strong
-ev_0.resumeAll(true);
+//ev_0.resumeAll(true);
 console.log(ev_0);
 
 // el_0.delegate('click', [
